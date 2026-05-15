@@ -39,7 +39,7 @@ O jogador utiliza o teclado para interagir com as notas. Os controles específic
 ## Estrutura do Projeto
 
 ```
-Beat-Slay-Repeat/
+game/
 ├── index.html           # Página principal
 ├── style.css            # Estilos e animações
 ├── README.md            # Este arquivo
@@ -57,31 +57,26 @@ Beat-Slay-Repeat/
     ├── collision.js     # Detecção de colisão com zona de acerto
     ├── ui.js            # Interface do usuário (HUD, menus, efeitos)
     ├── audio.js         # Controle de áudio e sons
+    ├── beatmaps.js      # Mapas manuais das notas por dificuldade
     └── storage.js       # Persistência de dados (localStorage)
 ```
-
 ## Divisão de Trabalhos
 
 ### Carolina — Gameplay/Core
 **Responsável pelo "coração" do jogo**
 
 **Responsabilidades:**
-- Spawn das notas musicais
-- Movimentação das notas na tela
-- Cálculo de timing e sincronização
-- Dificuldade progressiva
 - Loop principal do jogo
+- Controle dos estados do jogo
+- Spawn das notas
+- Movimentação das notas
+- Criação e remoção dinâmica das notas no DOM
+- Controle do tempo decorrido da partida
 
 **Arquivos:**
 - `game.js`
 - `notes.js`
 - `beatmaps.js`
-
-**Principais Funções:**
-- `spawnNote()` - Cria novas notas na tela
-- `updateNotes()` - Atualiza posição das notas
-- `startGame()` - Inicia o loop do jogo
-- `increaseDifficulty()` - Aumenta dificuldade
 
 ---
 
@@ -91,10 +86,12 @@ Beat-Slay-Repeat/
 **Responsabilidades:**
 - Layout e estrutura visual
 - CSS e estilização
-- Animações suaves
-- HUD (Heads-Up Display)
-- Menu e telas do jogo
-- Efeitos visuais
+- Animações e efeitos visuais
+- HUD do jogo
+- Menu inicial e seleção de dificuldade
+- Tela de pausa
+- Tela de game over
+- Feedback visual de acerto, erro e combo
 
 **Arquivos:**
 - `index.html`
@@ -102,33 +99,24 @@ Beat-Slay-Repeat/
 - `ui.js`
 
 **Componentes Principais:**
-- **Menu Inicial**: Botão start e seleção de dificuldade
-- **HUD em Jogo**: Score, combo, reputação, accuracy
-- **Tela de Game Over**: Score final e botão retry
-- **Efeitos Visuais**: Glow neon, animações de hit, feedback visual
+- **Menu Inicial**: botão start e seleção de dificuldade
+- **HUD em Jogo**: score, combo, reputação e accuracy
+- **Tela de Pausa**: opção de continuar ou sair
+- **Tela de Game Over**: score final, maior pontuação e botão retry
+- **Efeitos Visuais**: glow neon, animações de hit e feedback visual
 
 ---
-
 ### Aline — Input/Sistema/Som
-**Responsável pela interação e feedback**
+**Responsável pela interação, timing e feedback**
 
 **Responsabilidades:**
+- Criação dos beatmaps manuais
+- Sincronização das notas com a música
 - Detecção de entrada do teclado
-- Detecção de colisão com zona de acerto
+- Verificação do acerto com base no `hitTime`
+- Aplicação da margem de erro da dificuldade escolhida
 - Cálculo de score e acurácia
-- Sistema de vidas (reputação)
+- Sistema de vidas/reputação
 - Gerenciamento de combo
-- Reprodução de sons e música
-- Persistência de dados (high scores)
-
-**Arquivos:**
-- `input.js`
-- `collision.js`
-- `audio.js`
-- `storage.js`
-
-**Principais Funções:**
-- `checkHit()` - Verifica se nota foi acertada
-- `handleKeyPress()` - Processa entrada do teclado
-- `playSound()` - Reproduz efeitos sonoros
-- `saveHighscore()` - Salva melhor pontuação
+- Reprodução de música e efeitos sonoros
+- Persistência de dados com localStorage
