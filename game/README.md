@@ -120,3 +120,10 @@ game/
 - Gerenciamento de combo
 - Reprodução de música e efeitos sonoros
 - Persistência de dados com localStorage
+
+**Arquivos:**
+- `beatmaps.js`
+- `input.js`
+- `collision.js`
+- `audio.js`
+- `storage.js`
