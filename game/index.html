@@ -1,11 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Beat-Slay-Repeat</title>
+    <link rel="icon" href="data:,">
 </head>
 <body>
-    
+    <!-- Painel de teste dos módulos input, collision, audio, storage (remover quando ui.js existir) -->
+    <main class="pagina">
+        <section class="teste-modulos-aline" aria-label="Teste dos módulos storage e audio">
+            <h1>Beat-Slay-Repeat — teste local</h1>
+            <p class="teste-aviso">Abra esta página via servidor local (<code>python -m http.server</code> na pasta <code>game</code>) para áudio e caminhos relativos funcionarem corretamente.</p>
+            <div class="teste-botoes">
+                <button type="button" id="btn-retomar-audio">Retomar áudio (primeiro gesto)</button>
+                <button type="button" id="btn-som-acerto">Som acerto</button>
+                <button type="button" id="btn-som-erro">Som erro</button>
+                <button type="button" id="btn-musica">Tocar / pausar música</button>
+            </div>
+            <div class="teste-botoes">
+                <button type="button" id="btn-salvar-recorde">Salvar recorde de teste (1200 pts)</button>
+                <button type="button" id="btn-mostrar-recordes">Mostrar recordes no console</button>
+                <button type="button" id="btn-limpar-recordes">Limpar recordes (dev)</button>
+            </div>
+            <p class="teste-aviso" style="margin-top:1rem">
+                <strong>Teste de <code>verificarAcerto</code>:</strong> isso <em>não</em> é o jogo final — só inventa uma “nota” na faixa da tecla <kbd>A</kbd>, na altura certa. Cada acerto <strong>consome</strong> essa nota; para testar de novo, clique outra vez em «Simular nota…» (o painel também zera score/reputação nesse clique).
+            </p>
+            <div class="teste-botoes">
+                <button type="button" id="btn-preparar-nota-a">Simular nota na lane A (y = linha de acerto)</button>
+                <button type="button" id="btn-preparar-cinco-notas-a">Modo combo: 5 notas na lane A (pressione A 5×)</button>
+            </div>
+            <p class="teste-aviso" style="margin-top:0.75rem;font-size:0.9rem;opacity:0.9">
+                Dica ritmo: acertos podem ficar mais baixos que a música; <strong>erro</strong> costuma ser mais alto para destacar. Ajuste no código: <code>Entrada.definirVolumeSomAcerto(0.25)</code>, <code>Entrada.definirVolumeSomErro(1)</code>.
+            </p>
+        </section>
+    </main>
+    <script src="js/storage.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/collision.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/teste-modulos.js"></script>
 </body>
-</html>l
+</html>
