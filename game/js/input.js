@@ -29,7 +29,7 @@ const estadoJogador = {
 
 /**
  * Volume do hit “comum” (0..1). Ritmo costuma usar SFX mais baixo que a música
- * para não poluir; suba se estiver inaudível ou baixe (ex. 0.25) se atrapalhar a trilha.
+ * para não poluir; subir se estiver inaudível ou baixar (ex. 0.25) se atrapalhar a trilha.
  */
 let volumeSomAcerto = 0.38;
 
@@ -41,7 +41,7 @@ function definirVolumeSomAcerto(volume) {
 }
 
 /**
- * Erro precisa cortar acima da música para o jogador perceber; suba se ainda ficar baixo.
+ * Erro precisa cortar acima da música para o jogador perceber; subir se ainda ficar baixo.
  */
 let volumeSomErro = 0.92;
 

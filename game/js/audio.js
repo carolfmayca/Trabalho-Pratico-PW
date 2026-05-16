@@ -1,6 +1,5 @@
 /**
- * Efeitos sonoros e música (requisito: efeitos sonoros).
- * Se não houver arquivos MP3, usa bips via Web Audio API.
+ * Efeitos sonoros e música.
  */
 
 const CAMINHOS_SFX = {
@@ -9,7 +8,6 @@ const CAMINHOS_SFX = {
   combo: "assets/audio/combo.wav",
 };
 
-/** Música presente no repositório — ajuste se renomear o arquivo */
 const CAMINHO_MUSICA_PADRAO = "assets/audio/Beautiful_Liar.mp3";
 
 /** Frequências (Hz) para fallback quando não há arquivo ou play falha */
@@ -19,7 +17,7 @@ const PRESETS_BIP = {
   combo: { freq: 1200, duration: 0.05 },
 };
 
-/** Aumente quando trocar os .wav (cache do navegador). */
+/** Aumentar quando trocar os .wav (cache do navegador). */
 const VERSAO_SFX = 2;
 
 /** @type {Record<string, HTMLAudioElement>} */

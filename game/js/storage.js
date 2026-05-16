@@ -1,7 +1,5 @@
 /**
- * Persistência com localStorage (requisito: dados do jogo, ex.: pontuação).
- * Não depende de outros módulos nem do DOM do jogo.
- */
+ * Persistência com localStorage.*/
 
 const CHAVE_ARMAZENAMENTO = "beat-slay-repeat-highscores-v1";
 
