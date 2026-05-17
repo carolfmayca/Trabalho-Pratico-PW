@@ -1,5 +1,634 @@
-div {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+/* ============================================================
+   BEAT-SLAY-REPEAT — Estilos principais
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --rosa:        #ff2d78;
+  --rosa-claro:  #ff6eb0;
+  --roxo:        #9b30ff;
+  --roxo-escuro: #5c00b8;
+  --roxo-fundo:  #0d0014;
+  --roxo-medio:  #1e003a;
+  --branco:      #ffffff;
+  --cinza-claro: #d4b8ff;
+  --dourado:     #ffd700;
+
+  --glow-rosa: 0 0 8px #ff2d78, 0 0 20px #ff2d7855;
+  --glow-roxo: 0 0 8px #9b30ff, 0 0 20px #9b30ff55;
+
+  --font-ui:  'Press Start 2P', monospace;
+  --font-hud: 'Press Start 2P', monospace;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--roxo-fundo);
+  font-family: var(--font-ui);
+  color: var(--branco);
+}
+
+/* ============================================================
+   TELAS
+   ============================================================ */
+.tela {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tela.oculta {
+  display: none;
+}
+
+.tela.ativa {
+  display: flex;
+}
+
+/* ============================================================
+   MENU INICIAL — PALCO
+   ============================================================ */
+#tela-menu {
+  flex-direction: column;
+  overflow: hidden;
+  background: url('assets/images/fundo_inicial.png') center center / auto 98% no-repeat;
+}
+
+/* Overlay escuro para legibilidade dos botões */
+#tela-menu::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #0d001422 0%,
+    #0d001477 55%,
+    #0d0014bb 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+.menu-conteudo {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  width: max-content;
+}
+
+/* ============================================================
+   LOGO
+   ============================================================ */
+.logo-jogo {
+  width: clamp(220px, 35vw, 420px);
+  height: auto;
+  filter: drop-shadow(0 0 18px #ff2d78bb) drop-shadow(0 0 40px #9b30ff88);
+  animation: pulso-logo 2.5s ease-in-out infinite;
+}
+
+@keyframes pulso-logo {
+  0%, 100% { filter: drop-shadow(0 0 18px #ff2d78bb) drop-shadow(0 0 40px #9b30ff88); }
+  50%       { filter: drop-shadow(0 0 35px #ff2d78ff) drop-shadow(0 0 70px #9b30ffcc); }
+}
+
+/* Luzes de palco piscando */
+.menu-conteudo::before {
+  content: '● ● ● ● ● ● ● ● ● ● ● ● ●';
+  display: block;
+  font-size: 0.5rem;
+  letter-spacing: 0.6rem;
+  color: var(--dourado);
+  text-shadow:
+    0 0 6px var(--dourado),
+    0 0 14px #ff980088;
+  margin-bottom: 0.5rem;
+  animation: pisca-luzes 1.2s step-end infinite;
+}
+
+@keyframes pisca-luzes {
+  0%, 100% { opacity: 1;   color: var(--dourado); }
+  33%       { opacity: 0.3; color: var(--rosa);    }
+  66%       { opacity: 0.7; color: var(--roxo);    }
+}
+
+/* Borda de palco no chão */
+.menu-conteudo::after {
+  content: '';
+  position: absolute;
+  bottom: -3rem;
+  left: -50vw;
+  width: 200vw;
+  height: 6px;
+  background: linear-gradient(90deg,
+    transparent, var(--rosa) 20%, var(--dourado) 50%, var(--rosa) 80%, transparent
+  );
+  box-shadow: 0 0 18px var(--rosa), 0 0 40px var(--dourado);
+}
+
+/* ============================================================
+   TÍTULO
+   ============================================================ */
+.titulo-jogo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(1.2rem, 3.5vw, 2.5rem);
+  line-height: 1.5;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--rosa) 30%, var(--dourado) 70%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(4px 4px 0px #5c00b8) drop-shadow(0 0 20px #ff2d78aa);
+  animation: pulso-titulo 2.5s step-end infinite;
+}
+
+@keyframes pulso-titulo {
+  0%, 80%, 100% { filter: drop-shadow(4px 4px 0px #5c00b8) drop-shadow(0 0 20px #ff2d78aa); }
+  40%           { filter: drop-shadow(4px 4px 0px #5c00b8) drop-shadow(0 0 40px #ff2d78ff) drop-shadow(0 0 70px #9b30ffcc); }
+}
+
+.subtitulo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  color: var(--cinza-claro);
+  letter-spacing: 0.2em;
+  opacity: 0.7;
+  animation: pisca-sub 1.8s step-end infinite;
+}
+
+@keyframes pisca-sub {
+  0%, 49%, 100% { opacity: 0.7; }
+  50%, 99%      { opacity: 0.2; }
+}
+
+/* ============================================================
+   DIFICULDADE
+   ============================================================ */
+.dificuldade-selecao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dificuldade-titulo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cinza-claro);
+  opacity: 0.6;
+}
+
+.dificuldade-opcoes {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.dificuldade-opcao {
+  cursor: pointer;
+}
+
+.dificuldade-opcao input[type="radio"] {
+  display: none;
+}
+
+.dificuldade-opcao span {
+  display: block;
+  padding: 0.5rem 1rem;
+  border: 3px solid var(--roxo);
+  border-radius: 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--cinza-claro);
+  box-shadow: 3px 3px 0px var(--roxo-escuro);
+  transition: all 0.08s steps(1);
+}
+
+.dificuldade-opcao input:checked + span {
+  border-color: var(--rosa);
+  color: var(--branco);
+  background: var(--rosa);
+  box-shadow: 3px 3px 0px var(--roxo-escuro), 0 0 14px var(--rosa);
+}
+
+.dificuldade-opcao span:hover {
+  border-color: var(--rosa-claro);
+  color: var(--branco);
+}
+
+.recorde-menu {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  color: var(--cinza-claro);
+  opacity: 0.65;
+  letter-spacing: 0.1em;
+}
+
+#menu-melhor-score {
+  color: var(--dourado);
+  text-shadow: 0 0 8px var(--dourado);
+}
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
+.btn-primario {
+  padding: 0.85rem 2.5rem;
+  background: var(--rosa);
+  border: none;
+  border-radius: 0;
+  color: var(--branco);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow:
+    4px 4px 0px var(--roxo-escuro),
+    inset 0 -3px 0 #00000044;
+  transition: transform 0.08s steps(1), box-shadow 0.08s steps(1);
+}
+
+.btn-primario:hover {
+  transform: translate(-2px, -2px);
+  box-shadow:
+    6px 6px 0px var(--roxo-escuro),
+    0 0 20px var(--rosa),
+    inset 0 -3px 0 #00000044;
+}
+
+.btn-primario:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--roxo-escuro);
+}
+
+.btn-secundario {
+  padding: 0.65rem 1.75rem;
+  background: transparent;
+  border: 3px solid var(--roxo);
+  border-radius: 0;
+  color: var(--cinza-claro);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px var(--roxo-escuro);
+  transition: transform 0.08s steps(1), box-shadow 0.08s steps(1);
+}
+
+.btn-secundario:hover {
+  border-color: var(--rosa);
+  color: var(--rosa);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px var(--roxo-escuro), 0 0 12px var(--rosa);
+}
+
+/* ============================================================
+   HUD
+   ============================================================ */
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 1.25rem;
+  background: linear-gradient(180deg, #1e003af0 0%, #1e003a99 100%);
+  border-bottom: 3px solid var(--roxo);
+  box-shadow: 0 2px 24px #9b30ff44;
+  z-index: 100;
+}
+
+.hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.hud-rotulo {
+  font-family: var(--font-hud);
+  font-size: 0.4rem;
+  letter-spacing: 0.15em;
+  color: var(--cinza-claro);
+  opacity: 0.55;
+  text-transform: uppercase;
+}
+
+#hud-score,
+#hud-accuracy {
+  font-family: var(--font-hud);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--branco);
+  text-shadow: var(--glow-roxo);
+}
+
+#hud-combo {
+  font-family: var(--font-hud);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--rosa-claro);
+  text-shadow: var(--glow-rosa);
+}
+
+#hud-reputacao {
+  display: flex;
+  gap: 0.3rem;
+  font-size: 1.05rem;
+}
+
+.coracao {
+  color: var(--rosa);
+  text-shadow: var(--glow-rosa);
+  transition: transform 0.1s steps(2), opacity 0.1s steps(2);
+}
+
+.coracao.vazio {
+  color: #ffffff1a;
+  text-shadow: none;
+}
+
+.btn-pausar {
+  background: transparent;
+  border: 3px solid var(--roxo);
+  border-radius: 0;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  color: var(--cinza-claro);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 0px var(--roxo-escuro);
+  transition: all 0.08s steps(1);
+}
+
+.btn-pausar:hover {
+  border-color: var(--rosa);
+  color: var(--rosa);
+  box-shadow: 3px 3px 0px var(--roxo-escuro), 0 0 10px var(--rosa);
+}
+
+/* ============================================================
+   ÁREA DE JOGO + FAIXAS
+   ============================================================ */
+#tela-jogo {
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 50px;
+  background: url('assets/images/tela_principal.png') center center / 70% auto no-repeat;
+  overflow: hidden;
+}
+
+#area-jogo {
+  position: relative;
+  width: 480px;
+  height: calc(100vh - 60px);
+  margin-top: 60px;
+  overflow: hidden;
+}
+
+/* Luz de palco vinda do topo */
+#area-jogo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% -5%, #ff2d7825 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 110%, #9b30ff30 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.faixa {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  border-right: 1px solid #9b30ff22;
+}
+
+#faixa-0 { left:   0px; background: rgba(255, 45, 120, 0.02); }
+#faixa-1 { left: 120px; background: transparent; }
+#faixa-2 { left: 240px; background: rgba(255, 45, 120, 0.02); }
+#faixa-3 { left: 360px; background: transparent; }
+
+/* Linha de acerto — top: 520px conforme collision.js */
+#zona-acerto {
+  position: absolute;
+  top: 520px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--rosa) 20%,
+    var(--dourado) 50%,
+    var(--rosa) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 12px var(--rosa), 0 0 35px var(--roxo);
+  z-index: 10;
+}
+
+/* Indicadores de tecla — top = 520 - 18 = 502px */
+.zona-tecla {
+  position: absolute;
+  top: 502px;
+  width: 36px;
+  height: 36px;
+  border-radius: 0;
+  border: 3px solid var(--rosa);
+  background: var(--roxo-medio);
+  color: var(--rosa-claro);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  box-shadow: 3px 3px 0px var(--roxo-escuro), var(--glow-rosa);
+  user-select: none;
+  transition: transform 0.08s steps(1), box-shadow 0.08s steps(1), background 0.08s steps(1);
+}
+
+#zona-tecla-0 { left:  42px; }
+#zona-tecla-1 { left: 162px; }
+#zona-tecla-2 { left: 282px; }
+#zona-tecla-3 { left: 402px; }
+
+.zona-tecla.pressionada {
+  background: var(--rosa);
+  color: var(--branco);
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px 0px var(--roxo-escuro), 0 0 22px var(--rosa);
+}
+
+/* ============================================================
+   FEEDBACK DE TIMING
+   ============================================================ */
+#feedback-acerto {
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 200;
+  opacity: 0;
+}
+
+#feedback-acerto.perfeito {
+  color: var(--dourado);
+  text-shadow: 0 0 14px var(--dourado), 0 0 35px #ff980099;
+  animation: feedback-pop 0.65s steps(8) forwards;
+}
+
+#feedback-acerto.bom {
+  color: var(--rosa-claro);
+  text-shadow: var(--glow-rosa);
+  animation: feedback-pop 0.65s steps(8) forwards;
+}
+
+#feedback-acerto.errou {
+  color: #ff4444;
+  text-shadow: 0 0 10px #ff4444, 0 0 25px #ff000066;
+  animation: feedback-pop 0.65s steps(8) forwards;
+}
+
+@keyframes feedback-pop {
+  0%   { opacity: 1; transform: translateX(-50%) scale(0.6); }
+  25%  { opacity: 1; transform: translateX(-50%) scale(1.2); }
+  60%  { opacity: 1; transform: translateX(-50%) scale(1.0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-28px) scale(0.85); }
+}
+
+/* ============================================================
+   TELA DE PAUSA
+   ============================================================ */
+#tela-pausa {
+  background: #0d001488;
+  backdrop-filter: blur(6px);
+  flex-direction: column;
+  z-index: 300;
+}
+
+.pausa-conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 4rem;
+  border: 3px solid var(--roxo);
+  border-radius: 0;
+  background: var(--roxo-medio);
+  box-shadow: 6px 6px 0px var(--roxo-escuro), 0 0 50px #9b30ff44;
+}
+
+.pausa-conteudo h2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.5rem;
+  letter-spacing: 0.2em;
+  color: var(--rosa-claro);
+  text-shadow: var(--glow-rosa);
+}
+
+/* ============================================================
+   TELA DE GAME OVER
+   ============================================================ */
+#tela-game-over {
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse at 50% 20%, #ff2d7828 0%, transparent 55%),
+    #0d001499;
+  backdrop-filter: blur(4px);
+  z-index: 300;
+}
+
+.game-over-conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+  padding: 2.5rem 3.5rem;
+  border: 3px solid var(--rosa);
+  border-radius: 0;
+  background: var(--roxo-medio);
+  box-shadow: 6px 6px 0px var(--roxo-escuro), 0 0 60px #ff2d7833;
+  text-align: center;
+}
+
+.game-over-titulo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(1rem, 3vw, 1.8rem);
+  line-height: 1.6;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--rosa), var(--dourado));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(4px 4px 0px #5c00b8);
+}
+
+.game-over-stats {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stat-rotulo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cinza-claro);
+  opacity: 0.55;
+}
+
+.stat-valor {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  color: var(--branco);
+  text-shadow: var(--glow-roxo);
+}
+
+#game-over-recorde {
+  color: var(--dourado);
+  text-shadow: 0 0 12px var(--dourado);
 }
