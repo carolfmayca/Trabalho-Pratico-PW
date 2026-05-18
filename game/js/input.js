@@ -69,7 +69,7 @@ function multiplicadorCombo(combo) {
 }
 
 /**
- * @param {"perfect"|"good"} qualidade
+ * @param {"perfect"|"great"|"good"|"ok"} qualidade
  */
 function registrarAcerto(qualidade) {
   estadoJogador.combo += 1;

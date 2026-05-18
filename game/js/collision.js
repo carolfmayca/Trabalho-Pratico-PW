@@ -18,7 +18,12 @@ function definirZonaAcerto(opcoes) {
 }
 
 /**
- * @typedef {"perfect" | "good"} QualidadeAcerto
+ * @typedef {"perfect" | "great" | "good" | "ok"} QualidadeAcerto
+ *
+ * perfect  — acerto preciso
+ * great    — muito bom
+ * good     — bom
+ * ok       — dentro da janela, mas tardio/adiantado
  */
 
 /**
@@ -57,7 +62,10 @@ function verificarAcerto(notas, indiceFaixa) {
  */
 function pontuacaoPorAcerto(qualidade, multiplicadorCombo = 1) {
   const base =
-    qualidade === "perfect" ? 300 : qualidade === "good" ? 150 : 0;
+    qualidade === "perfect" ? 300 :
+    qualidade === "great"   ? 200 :
+    qualidade === "good"    ? 150 :
+    qualidade === "ok"      ? 50  : 0;
   return Math.floor(base * Math.max(0, multiplicadorCombo));
 }
 
