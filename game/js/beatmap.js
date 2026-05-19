@@ -26,9 +26,6 @@ const BEATMAPS = {
   }
 };
 
-/**
- * Configurações de dificuldade
- */
 const DIFICULDADES = {
   easy: {
     nome: "Fácil",
@@ -39,20 +36,17 @@ const DIFICULDADES = {
   medium: {
     nome: "Médio",
     travelTime: 2000,
-    hitWindow: 150,
+    hitWindow: 175,
     reputacaoInicial: 4
   },
   hard: {
     nome: "Difícil",
     travelTime: 1500,
-    hitWindow: 100,
+    hitWindow: 150,
     reputacaoInicial: 3
   }
 };
 
-/**
- * Obtém beatmap para uma música e dificuldade
- */
 function obterBeatmap(musica, dificuldade) {
   const beatmapMusica = BEATMAPS[musica];
   if (!beatmapMusica) return null;
@@ -70,9 +64,7 @@ function obterBeatmap(musica, dificuldade) {
   };
 }
 
-/**
- * Lista todas as músicas disponíveis
- */
+// no caso seria só feather i guess
 function listarMusicas() {
   return Object.keys(BEATMAPS).map(id => ({
     id,
