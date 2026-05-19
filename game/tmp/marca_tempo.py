@@ -1,7 +1,7 @@
 import pygame
 import time
 
-AUDIO_FILE = "assets/audio/Beautiful_Liar.mp3"
+AUDIO_FILE = "assets/audio/Feather.mp3"
 
 pygame.init()
 pygame.mixer.init()
@@ -16,10 +16,10 @@ pygame.mixer.music.play()
 print("Pressione as setas (← ↑ → ↓) para registrar o tempo. Pressione ESC para sair.")
 
 key_map = {
-    pygame.K_LEFT: "LEFT",
-    pygame.K_RIGHT: "RIGHT",
-    pygame.K_UP: "UP",
-    pygame.K_DOWN: "DOWN"
+    pygame.K_A: "A",
+    pygame.K_S: "S",
+    pygame.K_D: "D",
+    pygame.K_F: "F"
 }
 
 events = []
