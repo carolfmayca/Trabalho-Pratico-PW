@@ -8,7 +8,7 @@ const CAMINHOS_SFX = {
   combo: "assets/audio/combo.wav",
 };
 
-const CAMINHO_MUSICA_PADRAO = "assets/audio/Beautiful_Liar.mp3";
+const CAMINHO_MUSICA_PADRAO = "assets/audio/Feather.mp3";
 
 /** Frequências (Hz) para fallback quando não há arquivo ou play falha */
 const PRESETS_BIP = {

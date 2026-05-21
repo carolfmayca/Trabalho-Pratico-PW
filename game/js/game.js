@@ -52,7 +52,7 @@ function inicializarJogo() {
   
   // Inicializa módulos
   if (window.Notas) {
-    window.Notas.inicializarNotas('game-area');
+    window.Notas.inicializarNotas('area-jogo');
   }
   
   // Configura input

@@ -9,9 +9,6 @@ let proximoIdNota = 0;
 // onde as notas serão criadas
 let containerNotas = null;
 
-// Posição Y da linha de acerto (px)
-let linhaAcertoY = 520;
-
 // Mapeamento de lanes para posições X
 const LANE_POSITIONS = {
   0: 25,   // A - 25% da largura
@@ -25,12 +22,7 @@ function inicializarNotas(containerId = 'game-area') {
   if (!containerNotas) {
     console.error('Container de notas não encontrado:', containerId);
   }
-  
-  // Obtém linha de acerto do módulo Colisao se disponível
-  if (window.Colisao && window.Colisao.obterLinhaAcertoY) {
-    linhaAcertoY = window.Colisao.obterLinhaAcertoY();
-  }
-  
+
   notasAtivas = [];
   proximoIdNota = 0;
 }
@@ -67,19 +59,21 @@ function criarNota(dadosNota, travelTime) {
 }
 
 function atualizarNotas(tempoDecorrido) {
+  const linhaAcertoY = window.Colisao?.obterLinhaAcertoY() || 520;
+
   notasAtivas.forEach(nota => {
     if (nota.hit || nota.missed) return;
-    
+
     // Calcula progresso (0 = topo, 1 = linha de acerto)
     const tempoRestante = nota.hitTime - tempoDecorrido;
     const progresso = 1 - (tempoRestante / nota.travelTime);
-    
+
     const inicioY = 0;
     const fimY = linhaAcertoY;
     nota.y = inicioY + (fimY - inicioY) * progresso;
-    
+
     nota.element.style.top = `${nota.y}px`;
-    
+
     // Adiciona classe visual quando próxima da zona de acerto
     const distancia = Math.abs(nota.y - linhaAcertoY);
     if (distancia < 50 && !nota.element.classList.contains('near-hit')) {
