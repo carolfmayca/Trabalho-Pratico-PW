@@ -633,3 +633,167 @@ html, body {
   text-shadow: 0 0 12px var(--dourado);
 }
 
+/* ============================================================
+   PERSONAGENS NO PALCO
+   ============================================================ */
+
+/* ============================================================
+   CONTAINER DO PALCO
+============================================================ */
+#palco {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================================================
+   CANTORA PRINCIPAL
+============================================================ */
+#sprite-personagem {
+  position: absolute;
+
+  left: 50%;
+  top: 220px;
+
+  transform: translateX(-50%) scale(1.7);
+
+  width: 200px;
+  height: 200px;
+
+  background-image: url('assets/images/sprite_asset_1024px_2x4_1778254147976.png');
+
+  background-size: 400px 800px;
+
+  background-repeat: no-repeat;
+
+  image-rendering: pixelated;
+
+  pointer-events: none;
+
+  z-index: 10;
+
+  animation: animar-cantora 1.2s steps(1) infinite;
+}
+
+/* ============================================================
+   BATERISTA
+============================================================ */
+#sprite-baterista {
+  position: absolute;
+
+  right: 80px;
+  bottom: 60px;
+
+  width: 100px;
+  height: 400px;
+
+  background-image: url('assets/images/bateria.png');
+
+  background-size: 600px 400px;
+
+  background-position: 0px 0px;
+  background-repeat: no-repeat;
+
+  image-rendering: pixelated;
+
+  pointer-events: none;
+
+  opacity: 0.95;
+
+  z-index: 4;
+
+  animation: animar-baterista 2s steps(1) infinite;
+}
+
+/* ============================================================
+   GUITARRISTA
+============================================================ */
+#sprite-guitarrista {
+  position: absolute;
+
+  left: 60px;
+  bottom: 60px;
+
+  width: 100px;
+  height: 400px;
+
+  background-image: url('assets/images/guitarra.png');
+
+  background-size: 600px 400px;
+
+  background-position: 0px 0px;
+  background-repeat: no-repeat;
+
+  image-rendering: pixelated;
+
+  pointer-events: none;
+
+  opacity: 0.95;
+
+  z-index: 4;
+
+  animation: animar-guitarrista 2s steps(1) infinite;
+}
+
+/* ============================================================
+   ANIMAÇÃO DA CANTORA
+============================================================ */
+@keyframes animar-cantora {
+
+  0% {
+    background-position: 0px 0px;
+  }
+
+  14.28% {
+    background-position: -200px 0px;
+  }
+
+  28.57% {
+    background-position: 0px -200px;
+  }
+
+  42.85% {
+    background-position: -200px -200px;
+  }
+
+  57.14% {
+    background-position: 0px -400px;
+  }
+
+  71.42% {
+    background-position: -200px -400px;
+  }
+
+  85.71% {
+    background-position: 0px -600px;
+  }
+
+  100% {
+    background-position: 0px 0px;
+  }
+}
+
+/* ============================================================
+   ANIMAÇÃO DA BATERISTA
+============================================================ */
+@keyframes animar-baterista {
+  0%   { background-position:    0px 0px; }
+  16%  { background-position: -100px 0px; }
+  33%  { background-position: -200px 0px; }
+  50%  { background-position: -300px 0px; }
+  66%  { background-position: -400px 0px; }
+  83%  { background-position: -500px 0px; }
+  100% { background-position:    0px 0px; }
+}
+
+/* ============================================================
+   ANIMAÇÃO DA GUITARRISTA
+============================================================ */
+@keyframes animar-guitarrista {
+  0%   { background-position:    0px 0px; }
+  16%  { background-position: -100px 0px; }
+  33%  { background-position: -200px 0px; }
+  50%  { background-position: -300px 0px; }
+  66%  { background-position: -400px 0px; }
+  83%  { background-position: -500px 0px; }
+  100% { background-position:    0px 0px; }
+}
