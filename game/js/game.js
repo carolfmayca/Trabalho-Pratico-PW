@@ -185,6 +185,7 @@ function terminarJogo() {
     const estado = window.Entrada.estadoJogador;
     window.Armazenamento.salvarRecorde('Player', estado.score);
     console.log(`[Game] Pontuação final: ${estado.score}`);
+    if (window.UI) window.UI.mostrarGameOver(estado.score, estado.accuracy);
   }
   
   if (window.Notas) {
@@ -321,10 +322,11 @@ function processarTecla(indiceLane) {
     resultado.note.consumed = true;
     window.Entrada.registrarAcerto(qualidade);
     window.Notas.marcarNotaAcertada(resultado.note, qualidade);
-  } else {
-    // Errou (pressionou sem nota ou fora do timing)
-    window.Entrada.registrarErro();
-  }
+    if (window.UI) window.UI.mostrarFeedback(qualidade);  // ← adicionar
+    } else {
+      window.Entrada.registrarErro();
+      if (window.UI) window.UI.mostrarFeedback('miss');     // ← adicionar
+    }
 }
 
 // HUD
