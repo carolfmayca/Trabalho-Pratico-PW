@@ -49,7 +49,7 @@ function obterContextoAudio() {
 function retomarAudio() {
   const ctx = obterContextoAudio();
   if (ctx && ctx.state === "suspended") {
-    ctx.resume().catch(() => {});
+    ctx.resume().catch(() => { });
   }
 }
 
@@ -132,11 +132,17 @@ function tocarMusica(src = CAMINHO_MUSICA_PADRAO, volume = 0.35) {
   }
   elementoMusica.volume = Math.min(1, Math.max(0, volume));
   elementoMusica.currentTime = 0;
-  elementoMusica.play().catch(() => {});
+  elementoMusica.play().catch(() => { });
 }
 
 function pausarMusica() {
   if (elementoMusica) elementoMusica.pause();
+}
+
+function retomarMusica() {
+  if (elementoMusica) {
+    elementoMusica.play().catch(() => { });
+  }
 }
 
 function definirVolumeMusica(v) {
@@ -168,6 +174,7 @@ window.Som = {
   tocarBip,
   tocarMusica,
   pausarMusica,
+  retomarMusica,
   definirVolumeMusica,
   retomarAudio,
 };

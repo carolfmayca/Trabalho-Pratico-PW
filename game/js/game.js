@@ -163,8 +163,10 @@ function retomarJogo() {
   estadoAtual = ESTADOS.JOGANDO;
 
   if (window.Som) {
-    window.Som.tocarMusica();
+    window.Som.retomarMusica();
   }
+
+  loopJogo(performance.now());
 }
 
 function terminarJogo() {
