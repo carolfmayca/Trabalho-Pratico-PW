@@ -75,19 +75,19 @@ const DIFICULDADES = {
   easy: {
     nome: "Fácil",
     travelTime: 2500,      // Tempo que nota leva para chegar (ms)
-    hitWindow: 200,        // Janela de acerto (ms)
-    reputacaoInicial: 5    // Vidas iniciais
+    hitWindow: 500,        // Janela de acerto (ms)
+    reputacaoInicial: 10    // Vidas iniciais
   },
   medium: {
     nome: "Médio",
     travelTime: 2000,
-    hitWindow: 175,
+    hitWindow: 400,
     reputacaoInicial: 4
   },
   hard: {
     nome: "Difícil",
     travelTime: 1500,
-    hitWindow: 150,
+    hitWindow: 300,
     reputacaoInicial: 3
   }
 };
