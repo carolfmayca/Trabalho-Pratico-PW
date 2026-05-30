@@ -26,9 +26,9 @@ let fimJogoAgendado = false;
 
 // Janelas de timing em ms (quanto o jogador pode errar para cada grau)
 const JANELAS_TIMING = {
-  perfect: 30,  // ±10ms → PERFECT
-  great:   50,  // ±20ms → GREAT
-  good:    80,  // ±30ms → GOOD
+  perfect: 100,  // ±100ms → PERFECT
+  great: 150,  // ±150ms → GREAT
+  good: 200,  // ±200ms → GOOD
   // acima disso até o hitWindow da dificuldade → OK
 };
 
@@ -39,8 +39,8 @@ const JANELAS_TIMING = {
  */
 function calcularQualidadeTiming(ms) {
   if (ms <= JANELAS_TIMING.perfect) return 'perfect';
-  if (ms <= JANELAS_TIMING.great)   return 'great';
-  if (ms <= JANELAS_TIMING.good)    return 'good';
+  if (ms <= JANELAS_TIMING.great) return 'great';
+  if (ms <= JANELAS_TIMING.good) return 'good';
   return 'ok';
 }
 
@@ -49,17 +49,17 @@ function calcularQualidadeTiming(ms) {
 // Inicializa o jogo
 function inicializarJogo() {
   console.log('[Game] Inicializando jogo...');
-  
+
   // Inicializa módulos
   if (window.Notas) {
     window.Notas.inicializarNotas('area-jogo');
   }
-  
+
   // Configura input
   if (window.Entrada) {
     window.Entrada.iniciarEntrada(processarTecla);
   }
-  
+
   // seta zona de acerto
   if (window.Colisao) {
     window.Colisao.definirZonaAcerto({
@@ -68,7 +68,7 @@ function inicializarJogo() {
       toleranciaBoa: 40
     });
   }
-  
+
   estadoAtual = ESTADOS.MENU;
   console.log('[Game] Jogo inicializado');
 }
@@ -106,7 +106,7 @@ function iniciarJogo(musica = 'feather', dificuldade = 'easy') {
   if (window.Notas) {
     window.Notas.limparNotas();
   }
-  
+
   // Reseta timers
   tempoInicio = performance.now();
   tempoDecorrido = 0;
@@ -114,37 +114,37 @@ function iniciarJogo(musica = 'feather', dificuldade = 'easy') {
   tempoAcumuladoPausa = 0;
   indiceProximaNota = 0;
   fimJogoAgendado = false;
-  
+
   // Reseta flags de spawn
   beatmapAtual.notas.forEach(nota => {
     nota.spawned = false;
     nota.hit = false;
   });
-  
+
   estadoAtual = ESTADOS.JOGANDO;
-  
+
   // Inicia música
   if (window.Som) {
     window.Som.retomarAudio();
     window.Som.tocarMusica(beatmapAtual.arquivo, 0.35);
   }
-  
+
   // Inicia loop
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId);
   }
   loopJogo(performance.now());
-  
+
   console.log('[Game] Jogo iniciado!');
 }
 
 function pausarJogo() {
   if (estadoAtual !== ESTADOS.JOGANDO) return;
-  
+
   console.log('[Game] Jogo pausado');
   estadoAtual = ESTADOS.PAUSADO;
   tempoPausa = performance.now();
-  
+
   if (window.Som) {
     window.Som.pausarMusica();
   }
@@ -152,16 +152,16 @@ function pausarJogo() {
 
 function retomarJogo() {
   if (estadoAtual !== ESTADOS.PAUSADO) return;
-  
+
   console.log('[Game] Jogo retomado');
-  
+
   // Ajusta com tempo de pausa
   const duracaoPausa = performance.now() - tempoPausa;
   tempoAcumuladoPausa += duracaoPausa;
   ultimoFrame = performance.now();
-  
+
   estadoAtual = ESTADOS.JOGANDO;
-  
+
   if (window.Som) {
     window.Som.tocarMusica();
   }
@@ -169,19 +169,19 @@ function retomarJogo() {
 
 function terminarJogo() {
   if (estadoAtual === ESTADOS.GAME_OVER) return;
-  
+
   console.log('[Game] Game Over');
   estadoAtual = ESTADOS.GAME_OVER;
-  
+
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId);
     animationFrameId = null;
   }
-  
+
   if (window.Som) {
     window.Som.pausarMusica();
   }
-  
+
   // Salva recorde
   if (window.Armazenamento && window.Entrada) {
     const estado = window.Entrada.estadoJogador;
@@ -189,7 +189,7 @@ function terminarJogo() {
     console.log(`[Game] Pontuação final: ${estado.score}`);
     if (window.UI) window.UI.mostrarGameOver(estado.score, estado.accuracy);
   }
-  
+
   if (window.Notas) {
     setTimeout(() => window.Notas.limparNotas(), 1000);
   }
@@ -197,20 +197,20 @@ function terminarJogo() {
 
 function voltarMenu() {
   console.log('[Game] Voltando ao menu');
-  
+
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId);
     animationFrameId = null;
   }
-  
+
   if (window.Som) {
     window.Som.pausarMusica();
   }
-  
+
   if (window.Notas) {
     window.Notas.limparNotas();
   }
-  
+
   estadoAtual = ESTADOS.MENU;
   beatmapAtual = null;
 }
@@ -221,24 +221,24 @@ function loopJogo(timestamp) {
   if (estadoAtual !== ESTADOS.JOGANDO) {
     return; // Para o loop se não estiver jogando
   }
-  
+
   tempoDecorrido = timestamp - tempoInicio - tempoAcumuladoPausa;
-  
+
   spawnarNotas(tempoDecorrido);
-  
+
   // Atualiza posição das notas
   if (window.Notas) {
     window.Notas.atualizarNotas(tempoDecorrido);
   }
-  
+
   // Verifica notas perdidas
   verificarNotasPerdidas(tempoDecorrido);
-  
+
   atualizarHUD();
-  
+
   // Verifica fim do jogo
   verificarFimJogo(tempoDecorrido);
-  
+
   ultimoFrame = timestamp;
   animationFrameId = requestAnimationFrame(loopJogo);
 }
@@ -273,13 +273,13 @@ function spawnarNotas(tempoDecorrido) {
 
 function verificarNotasPerdidas(tempoDecorrido) {
   if (!beatmapAtual || !window.Notas || !window.Entrada) return;
-  
+
   const hitWindow = beatmapAtual.config.hitWindow;
   const notasPerdidas = window.Notas.verificarNotasPerdidas(tempoDecorrido, hitWindow);
-  
+
   notasPerdidas.forEach(nota => {
     window.Entrada.registrarErro();
-    
+
     // Remove nota após delay
     setTimeout(() => window.Notas.removerNota(nota), 500);
   });
@@ -322,33 +322,43 @@ function verificarFimJogo(tempoDecorrido) {
 
 function processarTecla(indiceLane) {
   if (estadoAtual !== ESTADOS.JOGANDO) return;
-  if (!window.Notas || !window.Colisao || !window.Entrada) return;
-  
-  const notasAtivas = window.Notas.obterNotasAtivas();
-  const resultado = window.Colisao.verificarAcerto(notasAtivas, indiceLane);
-  
-  if (resultado) {
-    // Calcula qualidade pelo timing em ms
-    const timingMs = Math.abs(resultado.note.hitTime - tempoDecorrido);
-    const qualidade = calcularQualidadeTiming(timingMs);
+  if (!window.Notas || !window.Entrada || !beatmapAtual) return;
 
-    resultado.note.consumed = true;
-    window.Entrada.registrarAcerto(qualidade);
-    window.Notas.marcarNotaAcertada(resultado.note, qualidade);
-    if (window.UI) window.UI.mostrarFeedback(qualidade);  // ← adicionar
-    } else {
-      window.Entrada.registrarErro();
-      if (window.UI) window.UI.mostrarFeedback('miss');     // ← adicionar
+  const notasAtivas = window.Notas.obterNotasAtivas();
+  const hitWindow = beatmapAtual.config.hitWindow;
+
+  // Busca a nota mais próxima por timing (ms) na lane pressionada
+  let melhorNota = null;
+  let melhorDiff = Infinity;
+
+  for (const nota of notasAtivas) {
+    if (!nota || nota.hit || nota.missed || nota.consumed || nota.lane !== indiceLane) continue;
+    const diff = Math.abs(nota.hitTime - tempoDecorrido);
+    if (diff < melhorDiff) {
+      melhorDiff = diff;
+      melhorNota = nota;
     }
+  }
+
+  if (melhorNota && melhorDiff <= hitWindow) {
+    const qualidade = calcularQualidadeTiming(melhorDiff);
+    melhorNota.consumed = true;
+    window.Entrada.registrarAcerto(qualidade);
+    window.Notas.marcarNotaAcertada(melhorNota, qualidade);
+    if (window.UI) window.UI.mostrarFeedback(qualidade);
+  } else {
+    window.Entrada.registrarErro();
+    if (window.UI) window.UI.mostrarFeedback('miss');
+  }
 }
 
 // HUD
 
 function atualizarHUD() {
   if (!window.Entrada) return;
-  
+
   const estado = window.Entrada.estadoJogador;
-  
+
   // Atualiza elementos do DOM 
   if (window.UI && window.UI.atualizarHUD) {
     window.UI.atualizarHUD(estado);
