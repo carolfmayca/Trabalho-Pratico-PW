@@ -797,3 +797,51 @@ html, body {
   83%  { background-position: -500px 0px; }
   100% { background-position:    0px 0px; }
 }
+
+/* ============================================================
+   NOTAS DO JOGO
+============================================================ */
+.note {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgba(255, 79, 160, 0.3);
+  border: 2px solid #ff4fa0;
+  border-radius: 8px;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+  z-index: 10;
+}
+
+.note[data-lane="0"] {
+  background-image: url('assets/images/left_arrow.png');
+}
+
+.note[data-lane="1"] {
+  background-image: url('assets/images/down_arrow.png');
+}
+
+.note[data-lane="2"] {
+  background-image: url('assets/images/right_arrow.png');
+}
+
+.note[data-lane="3"] {
+  background-image: url('assets/images/up_arrow.png');
+}
+
+.note.near-hit {
+  filter: drop-shadow(0 0 12px rgba(255, 79, 160, 0.8))
+          drop-shadow(0 0 20px rgba(255, 79, 160, 0.4));
+}
+
+.note.hit {
+  opacity: 0.3;
+  animation: desaparece 0.3s ease-out forwards;
+}
+
+@keyframes desaparece {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.8); }
+}

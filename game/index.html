@@ -4,40 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beat-Slay-Repeat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:,">
 </head>
 <body>
-    <!-- Painel de teste dos módulos input, collision, audio, storage (remover quando ui.js existir) -->
-    <main class="pagina">
-        <section class="teste-modulos-aline" aria-label="Teste dos módulos storage e audio">
-            <h1>Beat-Slay-Repeat — teste local</h1>
-            <p class="teste-aviso">Abra esta página via servidor local (<code>python -m http.server</code> na pasta <code>game</code>) para áudio e caminhos relativos funcionarem corretamente.</p>
-            <div class="teste-botoes">
-                <button type="button" id="btn-retomar-audio">Retomar áudio (primeiro gesto)</button>
-                <button type="button" id="btn-som-acerto">Som acerto</button>
-                <button type="button" id="btn-som-erro">Som erro</button>
-                <button type="button" id="btn-musica">Tocar / pausar música</button>
+
+    <!-- ==================== TELA: MENU INICIAL ==================== -->
+    <div id="tela-menu" class="tela ativa">
+        <div class="menu-conteudo">
+            <img src="assets/images/logo.png" alt="Beat Slay Repeat" class="logo-jogo">
+
+            <div class="dificuldade-selecao">
+                <p class="dificuldade-titulo">Dificuldade</p>
+                <div class="dificuldade-opcoes">
+                    <label class="dificuldade-opcao">
+                        <input type="radio" name="dificuldade" value="easy">
+                        <span>Fácil</span>
+                    </label>
+                    <label class="dificuldade-opcao">
+                        <input type="radio" name="dificuldade" value="medium" checked>
+                        <span>Médio</span>
+                    </label>
+                    <label class="dificuldade-opcao">
+                        <input type="radio" name="dificuldade" value="hard">
+                        <span>Difícil</span>
+                    </label>
+                </div>
             </div>
-            <div class="teste-botoes">
-                <button type="button" id="btn-salvar-recorde">Salvar recorde de teste (1200 pts)</button>
-                <button type="button" id="btn-mostrar-recordes">Mostrar recordes no console</button>
-                <button type="button" id="btn-limpar-recordes">Limpar recordes (dev)</button>
+
+            <button id="btn-iniciar" type="button" class="btn-primario">JOGAR</button>
+
+            <p class="recorde-menu">Melhor: <span id="menu-melhor-score">0</span></p>
+        </div>
+    </div>
+
+    <!-- ==================== TELA: JOGO ==================== -->
+    <div id="tela-jogo" class="tela oculta">
+
+        <!-- HUD superior -->
+        <div id="hud">
+            <div class="hud-item">
+                <span class="hud-rotulo">SCORE</span>
+                <span id="hud-score">0</span>
             </div>
-            <p class="teste-aviso" style="margin-top:1rem">
-                <strong>Teste de <code>verificarAcerto</code>:</strong> isso <em>não</em> é o jogo final — só inventa uma “nota” na faixa da tecla <kbd>A</kbd>, na altura certa. Cada acerto <strong>consome</strong> essa nota; para testar de novo, clique outra vez em «Simular nota…» (o painel também zera score/reputação nesse clique).
-            </p>
-            <div class="teste-botoes">
-                <button type="button" id="btn-preparar-nota-a">Simular nota na lane A (y = linha de acerto)</button>
-                <button type="button" id="btn-preparar-cinco-notas-a">Modo combo: 5 notas na lane A (pressione A 5×)</button>
+            <div class="hud-item">
+                <span class="hud-rotulo">COMBO</span>
+                <span id="hud-combo">x0</span>
             </div>
-            <p class="teste-aviso" style="margin-top:0.75rem;font-size:0.9rem;opacity:0.9">
-            </p>
-        </section>
-    </main>
+            <div class="hud-item">
+                <span class="hud-rotulo">VIDAS</span>
+                <div id="hud-reputacao">
+                    <!-- corações gerados dinamicamente por ui.js -->
+                </div>
+            </div>
+            <div class="hud-item">
+                <span class="hud-rotulo">PRECISÃO</span>
+                <span id="hud-accuracy">100%</span>
+            </div>
+            <button id="btn-pausar" type="button" class="btn-pausar" aria-label="Pausar jogo">⏸</button>
+        </div>
+
+        <!-- Área principal: notas caem aqui-->
+        <div id="area-jogo">
+            <!-- Faixas visuais -->
+            <div class="faixa" id="faixa-0" data-lane="0"></div>
+            <div class="faixa" id="faixa-1" data-lane="1"></div>
+            <div class="faixa" id="faixa-2" data-lane="2"></div>
+            <div class="faixa" id="faixa-3" data-lane="3"></div>
+
+            <!-- Personagens no palco -->
+            <div id="sprite-baterista"></div>
+            <div id="sprite-personagem"></div>
+            <div id="sprite-guitarrista"></div>
+
+            <!-- Linha de acerto — top: 520px conforme collision.js -->
+            <div id="zona-acerto"></div>
+
+            <!-- Indicadores das teclas na linha de acerto -->
+            <div class="zona-tecla" id="zona-tecla-0" data-lane="0">A</div>
+            <div class="zona-tecla" id="zona-tecla-1" data-lane="1">S</div>
+            <div class="zona-tecla" id="zona-tecla-2" data-lane="2">D</div>
+            <div class="zona-tecla" id="zona-tecla-3" data-lane="3">F</div>
+        </div>
+
+        <!-- Feedback de timing: "PERFECT!", "GOOD!", "MISS" -->
+        <div id="feedback-acerto" aria-live="assertive" aria-atomic="true"></div>
+    </div>
+
+    <!-- ==================== TELA: PAUSA ==================== -->
+    <div id="tela-pausa" class="tela oculta">
+        <div class="pausa-conteudo">
+            <h2>PAUSADO</h2>
+            <button id="btn-retomar" type="button" class="btn-primario">Continuar</button>
+            <button id="btn-sair-pausa" type="button" class="btn-secundario">Sair</button>
+        </div>
+    </div>
+
+    <!-- ==================== TELA: GAME OVER ==================== -->
+    <div id="tela-game-over" class="tela oculta">
+        <div class="game-over-conteudo">
+            <h2 class="game-over-titulo">FIM DE SHOW</h2>
+            <div class="game-over-stats">
+                <div class="stat-item">
+                    <span class="stat-rotulo">Pontuação</span>
+                    <span id="game-over-score" class="stat-valor">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-rotulo">Precisão</span>
+                    <span id="game-over-accuracy" class="stat-valor">100%</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-rotulo">Recorde</span>
+                    <span id="game-over-recorde" class="stat-valor">0</span>
+                </div>
+            </div>
+            <button id="btn-tentar-novamente" type="button" class="btn-primario">TENTAR NOVAMENTE</button>
+            <button id="btn-menu-principal" type="button" class="btn-secundario">Menu Principal</button>
+        </div>
+    </div>
+
     <script src="js/storage.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/collision.js"></script>
     <script src="js/input.js"></script>
-    <script src="js/teste-modulos.js"></script>
+    <script src="js/beatmap.js"></script>
+    <script src="js/notes.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

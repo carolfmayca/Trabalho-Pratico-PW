@@ -78,29 +78,31 @@ function inicializarJogo() {
 
 function iniciarJogo(musica = 'feather', dificuldade = 'easy') {
   console.log(`[Game] Iniciando jogo - Música: ${musica}, Dificuldade: ${dificuldade}`);
-  
+
   musicaAtual = musica;
   dificuldadeAtual = dificuldade;
-  
+
   // carrega beatmap
   if (!window.Beatmaps) {
     console.error('[Game] Módulo Beatmaps não encontrado!');
     return;
   }
-  
+
   beatmapAtual = window.Beatmaps.obterBeatmap(musica, dificuldade);
   if (!beatmapAtual) {
     console.error('[Game] Beatmap não encontrado!');
     return;
   }
-  
+
+  console.log(`[Game] Beatmap carregado: ${beatmapAtual.notas.length} notas`);
+
   if (window.Entrada) {
     window.Entrada.resetarEstadoJogador();
     const estado = window.Entrada.estadoJogador;
     estado.maxReputation = beatmapAtual.config.reputacaoInicial;
     estado.reputation = beatmapAtual.config.reputacaoInicial;
   }
-  
+
   if (window.Notas) {
     window.Notas.limparNotas();
   }
@@ -246,16 +248,17 @@ function loopJogo(timestamp) {
 ///baseado no beatmap e no tempo
 function spawnarNotas(tempoDecorrido) {
   if (!beatmapAtual || !window.Notas) return;
-  
+
   const notas = beatmapAtual.notas;
   const travelTime = beatmapAtual.config.travelTime;
-  
+
   // Percorre notas ainda não spawnadas
   for (let i = indiceProximaNota; i < notas.length; i++) {
     const nota = notas[i];
     const tempoSpawn = nota.hitTime - travelTime;
-    
+
     if (tempoDecorrido >= tempoSpawn && !nota.spawned) {
+      console.log(`[Game] Spawnando nota ${i} (lane ${nota.lane}, hitTime ${nota.hitTime})`);
       window.Notas.criarNota(nota, travelTime);
       nota.spawned = true;
       indiceProximaNota = i + 1;
@@ -284,21 +287,31 @@ function verificarNotasPerdidas(tempoDecorrido) {
 
 function verificarFimJogo(tempoDecorrido) {
   if (!window.Entrada || !beatmapAtual || fimJogoAgendado) return;
-  
+
   const estado = window.Entrada.estadoJogador;
-  
+
   // Game over por reputação zerada
   if (estado.reputation <= 0) {
+    console.log('[Game] Game Over: reputação zerada');
     fimJogoAgendado = true;
     terminarJogo();
     return;
   }
-  
-  // Fim natural da música (se todas as notas foram processadas)
+
+  // Fim natural da música (se todas as notas foram processadas OU tempo da música passou)
   const todasSpawnadas = indiceProximaNota >= beatmapAtual.notas.length;
   const nenhumaAtiva = window.Notas.contarNotasNaoProcessadas() === 0;
-  
+  const musicaTerminou = tempoDecorrido >= beatmapAtual.duracao;
+
   if (todasSpawnadas && nenhumaAtiva) {
+    console.log(`[Game] Todas notas spawnadas (${indiceProximaNota}/${beatmapAtual.notas.length}) e nenhuma ativa`);
+  }
+  if (musicaTerminou) {
+    console.log(`[Game] Música terminou (${tempoDecorrido}ms >= ${beatmapAtual.duracao}ms)`);
+  }
+
+  if ((todasSpawnadas && nenhumaAtiva) || musicaTerminou) {
+    console.log('[Game] Fim de jogo acionado');
     fimJogoAgendado = true;
     // Espera um pouco antes de terminar
     setTimeout(() => terminarJogo(), 2000);

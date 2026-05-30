@@ -131,6 +131,7 @@ function tocarMusica(src = CAMINHO_MUSICA_PADRAO, volume = 0.35) {
     }
   }
   elementoMusica.volume = Math.min(1, Math.max(0, volume));
+  elementoMusica.currentTime = 0;
   elementoMusica.play().catch(() => {});
 }
 
