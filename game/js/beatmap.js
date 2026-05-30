@@ -82,13 +82,13 @@ const DIFICULDADES = {
     nome: "Médio",
     travelTime: 2000,
     hitWindow: 400,
-    reputacaoInicial: 4
+    reputacaoInicial: 7
   },
   hard: {
     nome: "Difícil",
     travelTime: 1500,
     hitWindow: 300,
-    reputacaoInicial: 3
+    reputacaoInicial: 5
   }
 };
 
