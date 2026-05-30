@@ -9,12 +9,12 @@ let proximoIdNota = 0;
 // onde as notas serão criadas
 let containerNotas = null;
 
-// Mapeamento de lanes para posições X
+// Mapeamento de lanes para posições X (centro de cada faixa de 120px em container de 480px)
 const LANE_POSITIONS = {
-  0: 25,   // A - 25% da largura
-  1: 42,   // S - 42% da largura
-  2: 58,   // D - 58% da largura
-  3: 75    // F - 75% da largura
+  0: 12.5,  // A - centro da faixa 0 (60px / 480px)
+  1: 37.5,  // S - centro da faixa 1 (180px / 480px)
+  2: 62.5,  // D - centro da faixa 2 (300px / 480px)
+  3: 87.5   // F - centro da faixa 3 (420px / 480px)
 };
 
 function inicializarNotas(containerId = 'game-area') {
