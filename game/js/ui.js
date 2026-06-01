@@ -8,29 +8,29 @@
 // Referências ao DOM
 // ============================================================
 const telas = {
-  menu:     document.getElementById('tela-menu'),
-  jogo:     document.getElementById('tela-jogo'),
-  pausa:    document.getElementById('tela-pausa'),
+  menu: document.getElementById('tela-menu'),
+  jogo: document.getElementById('tela-jogo'),
+  pausa: document.getElementById('tela-pausa'),
   gameOver: document.getElementById('tela-game-over'),
 };
 
 const hud = {
-  score:      document.getElementById('hud-score'),
-  combo:      document.getElementById('hud-combo'),
-  reputacao:  document.getElementById('hud-reputacao'),
-  accuracy:   document.getElementById('hud-accuracy'),
+  score: document.getElementById('hud-score'),
+  combo: document.getElementById('hud-combo'),
+  reputacao: document.getElementById('hud-reputacao'),
+  accuracy: document.getElementById('hud-accuracy'),
 };
 
 const els = {
-  feedback:         document.getElementById('feedback-acerto'),
-  menuMelhorScore:  document.getElementById('menu-melhor-score'),
-  gameOverScore:    document.getElementById('game-over-score'),
+  feedback: document.getElementById('feedback-acerto'),
+  menuMelhorScore: document.getElementById('menu-melhor-score'),
+  gameOverScore: document.getElementById('game-over-score'),
   gameOverAccuracy: document.getElementById('game-over-accuracy'),
-  gameOverRecorde:  document.getElementById('game-over-recorde'),
-  btnIniciar:       document.getElementById('btn-iniciar'),
-  btnPausar:        document.getElementById('btn-pausar'),
-  btnRetomar:       document.getElementById('btn-retomar'),
-  btnSairPausa:     document.getElementById('btn-sair-pausa'),
+  gameOverRecorde: document.getElementById('game-over-recorde'),
+  btnIniciar: document.getElementById('btn-iniciar'),
+  btnPausar: document.getElementById('btn-pausar'),
+  btnRetomar: document.getElementById('btn-retomar'),
+  btnSairPausa: document.getElementById('btn-sair-pausa'),
   btnTentarNovamente: document.getElementById('btn-tentar-novamente'),
   btnMenuPrincipal: document.getElementById('btn-menu-principal'),
 };
@@ -63,8 +63,8 @@ function atualizarHUD() {
   const estado = window.Entrada ? window.Entrada.estadoJogador : null;
   if (!estado) return;
 
-  hud.score.textContent   = estado.score;
-  hud.combo.textContent   = 'x' + estado.combo;
+  hud.score.textContent = estado.score;
+  hud.combo.textContent = 'x' + estado.combo;
 
   const pct = window.Colisao
     ? window.Colisao.percentualPrecisao(estado.accuracy)
@@ -91,7 +91,7 @@ function _renderizarCoracoes(atual, maximo) {
 
 let _feedbackTimeout = null;
 
-/** @param {'perfect'|'good'|'miss'} tipo */
+/** @param {'perfect'|'great'|'good'|'ok'|'miss'} tipo */
 function mostrarFeedback(tipo) {
   const el = els.feedback;
   if (!el) return;
@@ -104,7 +104,10 @@ function mostrarFeedback(tipo) {
   if (tipo === 'perfect') {
     el.textContent = 'PERFECT!';
     el.classList.add('perfeito');
-  } else if (tipo === 'good') {
+  } else if (tipo === 'great') {
+    el.textContent = 'GREAT!';
+    el.classList.add('perfeito');
+  } else if (tipo === 'good' || tipo === 'ok') {
     el.textContent = 'GOOD';
     el.classList.add('bom');
   } else {
@@ -168,9 +171,9 @@ function mostrarGameOver(score, accuracy) {
     ? window.Armazenamento.obterMelhorPontuacao()
     : 0;
 
-  if (els.gameOverScore)    els.gameOverScore.textContent    = score;
+  if (els.gameOverScore) els.gameOverScore.textContent = score;
   if (els.gameOverAccuracy) els.gameOverAccuracy.textContent = pct + '%';
-  if (els.gameOverRecorde)  els.gameOverRecorde.textContent  = recorde;
+  if (els.gameOverRecorde) els.gameOverRecorde.textContent = recorde;
 
   mostrarTela('gameOver');
 }
