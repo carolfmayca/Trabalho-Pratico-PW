@@ -25,7 +25,12 @@ const estadoJogador = {
   reputation: 5,
   maxReputation: 5,
   accuracy: { hits: 0, total: 0 },
+  powerUpMultiplicador: 1,
 };
+
+let powerUpAtivo = false;
+let powerUpTimeout = null;
+let contagemAcertosParaBonus = 0;
 
 /**
  * Volume do hit “comum” (0..1). Ritmo costuma usar SFX mais baixo que a música
@@ -68,16 +73,50 @@ function multiplicadorCombo(combo) {
   return 1 + Math.min(2, Math.floor(combo / 5) * 0.1);
 }
 
+function ativarPowerUp(duracao = 10000) {
+  powerUpAtivo = true;
+  estadoJogador.powerUpMultiplicador = 2;
+  if (powerUpTimeout) clearTimeout(powerUpTimeout);
+  powerUpTimeout = setTimeout(() => desativarPowerUp(), duracao);
+  if (window.UI?.ativarPowerUpVisual) window.UI.ativarPowerUpVisual();
+  if (window.Som) window.Som.tocarSom('powerup', 0.6);
+
+  if (window.Notas) {
+    const notasAtivas = window.Notas.obterNotasAtivas();
+    notasAtivas.forEach(nota => {
+      if (nota.type === 'powerup' && !nota.consumed) {
+        nota.consumed = true;
+        if (nota.element) nota.element.remove();
+      }
+    });
+  }
+}
+
+function desativarPowerUp() {
+  powerUpAtivo = false;
+  estadoJogador.powerUpMultiplicador = 1;
+  if (window.UI?.desativarPowerUpVisual) window.UI.desativarPowerUpVisual();
+}
+
 /**
  * @param {"perfect"|"great"|"good"|"ok"} qualidade
  */
 function registrarAcerto(qualidade) {
   estadoJogador.combo += 1;
+  contagemAcertosParaBonus += 1;
+
   const mult = multiplicadorCombo(estadoJogador.combo);
   const pts = window.Colisao
-    ? window.Colisao.pontuacaoPorAcerto(qualidade, mult)
+    ? window.Colisao.pontuacaoPorAcerto(qualidade, mult) * estadoJogador.powerUpMultiplicador
     : 0;
   estadoJogador.score += pts;
+
+  if (contagemAcertosParaBonus >= 20 && estadoJogador.reputation < estadoJogador.maxReputation) {
+    estadoJogador.reputation += 1;
+    contagemAcertosParaBonus = 0;
+    if (window.UI?.mostrarBonusVida) window.UI.mostrarBonusVida();
+  }
+
   if (window.Colisao)
     window.Colisao.registrarPrecisao(estadoJogador.accuracy, true);
   if (window.Som) {
@@ -95,6 +134,7 @@ function registrarAcerto(qualidade) {
 function registrarErro() {
   estadoJogador.combo = 0;
   estadoJogador.reputation = Math.max(0, estadoJogador.reputation - 1);
+  if (powerUpAtivo) desativarPowerUp();
   if (window.Colisao)
     window.Colisao.registrarPrecisao(estadoJogador.accuracy, false);
   if (window.Som) window.Som.tocarSom("miss", volumeSomErro);
@@ -149,4 +189,6 @@ window.Entrada = {
   tratarTeclaPressionada,
   iniciarEntrada,
   encerrarEntrada,
+  ativarPowerUp,
+  desativarPowerUp,
 };

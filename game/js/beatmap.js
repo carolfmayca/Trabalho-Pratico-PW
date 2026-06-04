@@ -37,11 +37,20 @@ function gerarBeatmap(musica, dificuldade) {
 
   const notas = [];
   const tempoDisponivel = fimNotas - inicioNotas;
+  let ultimoPowerUpTime = -15000; // garante que primeiro pode ser power-up
 
   for (let i = 0; i < quantidade; i++) {
     const hitTime = inicioNotas + Math.round((tempoDisponivel / quantidade) * i + Math.random() * (intervaloMin * 0.5));
     const lane = Math.floor(Math.random() * 4);
-    notas.push({ hitTime, lane });
+    const tempoDesdeUltimoPowerUp = hitTime - ultimoPowerUpTime;
+    const isPowerUp = Math.random() < 0.08 && tempoDesdeUltimoPowerUp >= 15000;
+
+    if (isPowerUp) {
+      ultimoPowerUpTime = hitTime;
+      notas.push({ hitTime, lane, type: 'powerup' });
+    } else {
+      notas.push({ hitTime, lane });
+    }
   }
 
   // Ordena por tempo e garante intervalo mínimo entre notas

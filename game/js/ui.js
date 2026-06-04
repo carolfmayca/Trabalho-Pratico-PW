@@ -179,6 +179,29 @@ function mostrarGameOver(score, accuracy) {
 }
 
 // ============================================================
+// Power-Up Visual
+// ============================================================
+
+function ativarPowerUpVisual() {
+  const areaJogo = document.getElementById('area-jogo');
+  if (areaJogo) areaJogo.classList.add('power-up-ativo');
+}
+
+function desativarPowerUpVisual() {
+  const areaJogo = document.getElementById('area-jogo');
+  if (areaJogo) areaJogo.classList.remove('power-up-ativo');
+}
+
+function mostrarBonusVida() {
+  const bonusEl = document.createElement('div');
+  bonusEl.className = 'bonus-vida';
+  bonusEl.innerHTML = '♥';
+  document.body.appendChild(bonusEl);
+
+  setTimeout(() => bonusEl.remove(), 1500);
+}
+
+// ============================================================
 // Listeners dos botões
 // ============================================================
 
@@ -264,4 +287,7 @@ window.UI = {
   obterDificuldadeSelecionada,
   atualizarMenuRecorde,
   registrarCallbacks,
+  ativarPowerUpVisual,
+  desativarPowerUpVisual,
+  mostrarBonusVida,
 };

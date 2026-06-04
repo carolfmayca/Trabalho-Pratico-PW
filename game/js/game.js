@@ -258,9 +258,11 @@ function spawnarNotas(tempoDecorrido) {
   for (let i = indiceProximaNota; i < notas.length; i++) {
     const nota = notas[i];
     const tempoSpawn = nota.hitTime - travelTime;
+    const powerUpAtivo = window.Entrada?.estadoJogador.powerUpMultiplicador === 2;
+
+    if (nota.type === 'powerup' && powerUpAtivo) continue;
 
     if (tempoDecorrido >= tempoSpawn && !nota.spawned) {
-      console.log(`[Game] Spawnando nota ${i} (lane ${nota.lane}, hitTime ${nota.hitTime})`);
       window.Notas.criarNota(nota, travelTime);
       nota.spawned = true;
       indiceProximaNota = i + 1;
@@ -348,6 +350,9 @@ function processarTecla(indiceLane) {
     window.Entrada.registrarAcerto(qualidade);
     window.Notas.marcarNotaAcertada(melhorNota, qualidade);
     if (window.UI) window.UI.mostrarFeedback(qualidade);
+    if (melhorNota.type === 'powerup') {
+      window.Entrada.ativarPowerUp(10000);
+    }
   } else {
     window.Entrada.registrarErro();
     if (window.UI) window.UI.mostrarFeedback('miss');

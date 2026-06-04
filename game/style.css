@@ -403,6 +403,27 @@ html, body {
   margin-top: 50px;
   background: url('assets/images/tela_principal.png') center center / 70% auto no-repeat;
   overflow: hidden;
+  position: relative;
+  transition: filter 0.3s ease;
+}
+
+#tela-jogo.power-up-ativo {
+  filter: brightness(1.3) saturate(1.4) drop-shadow(0 0 40px #ffd700);
+}
+
+#tela-jogo.power-up-ativo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 500px 250px at center 25%, rgba(255, 215, 0, 0.4), transparent 70%);
+  pointer-events: none;
+  animation: glow-pulse 0.6s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
 }
 
 #area-jogo {
@@ -487,7 +508,61 @@ html, body {
   background: var(--rosa);
   color: var(--branco);
   transform: translate(3px, 3px);
-  box-shadow: 0px 0px 0px var(--roxo-escuro), 0 0 22px var(--rosa);
+  box-shadow: 3px 3px 0px var(--roxo-escuro), 0 0 22px var(--rosa);
+}
+
+/* ============================================================
+   POWER-UP
+   ============================================================ */
+#area-jogo.power-up-ativo {
+  animation: power-up-pulse 0.3s ease-in-out infinite;
+}
+
+@keyframes power-up-pulse {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: rgba(255, 45, 120, 0.15); }
+}
+
+.note.powerup {
+  background: radial-gradient(circle, #ffd700, #ff2d78) !important;
+  box-shadow: 0 0 16px #ffd700, 0 0 32px #ff2d7888 !important;
+  animation: powerup-spin 0.8s linear infinite;
+}
+
+@keyframes powerup-spin {
+  0% { transform: translateX(-50%) rotate(0deg); }
+  100% { transform: translateX(-50%) rotate(360deg); }
+}
+
+/* ============================================================
+   BÔNUS DE VIDA
+   ============================================================ */
+.bonus-vida {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  color: #ff2d78;
+  text-shadow: 0 0 30px #ff2d78, 0 0 60px #ff2d7888;
+  pointer-events: none;
+  z-index: 500;
+  animation: bonus-vida-pop 1.5s ease-out forwards;
+}
+
+@keyframes bonus-vida-pop {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -120%) scale(1.4);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -200%) scale(1.2);
+  }
 }
 
 /* ============================================================

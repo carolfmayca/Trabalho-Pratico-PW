@@ -33,7 +33,7 @@ function definirZonaAcerto(opcoes) {
 /**
  * @param {NotaSimples[]} notas
  * @param {number} indiceFaixa
- * @returns {{ note: NotaSimples, quality: QualidadeAcerto, distancePx: number } | null}
+ * @returns {{ note: NotaSimples, quality: QualidadeAcerto, distancePx: number, isPowerUp: boolean } | null}
  */
 function verificarAcerto(notas, indiceFaixa) {
   const candidatas = (notas || []).filter(
@@ -53,7 +53,8 @@ function verificarAcerto(notas, indiceFaixa) {
   if (!melhor || melhorDist > toleranciaBoa) return null;
 
   const quality = melhorDist <= toleranciaPerfeita ? "perfect" : "good";
-  return { note: melhor, quality, distancePx: melhorDist };
+  const isPowerUp = melhor.type === "powerup";
+  return { note: melhor, quality, distancePx: melhorDist, isPowerUp };
 }
 
 /**

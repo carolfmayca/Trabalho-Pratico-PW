@@ -9,12 +9,19 @@ let proximoIdNota = 0;
 // onde as notas serão criadas
 let containerNotas = null;
 
-// Mapeamento de lanes para posições X (centro de cada faixa de 120px em container de 480px)
+// Mapeamento de lanes para posições X
 const LANE_POSITIONS = {
-  0: 12.5,  // A - centro da faixa 0 (60px / 480px)
-  1: 37.5,  // S - centro da faixa 1 (180px / 480px)
-  2: 62.5,  // D - centro da faixa 2 (300px / 480px)
-  3: 87.5   // F - centro da faixa 3 (420px / 480px)
+  0: 12.5, 
+  1: 37.5,
+  2: 62.5,  
+  3: 87.5
+};
+
+const LANE_ARROWS = {
+  0: 'left_arrow.png',
+  1: 'down_arrow.png',
+  2: 'up_arrow.png',
+  3: 'right_arrow.png'
 };
 
 function inicializarNotas(containerId = 'game-area') {
@@ -29,20 +36,27 @@ function inicializarNotas(containerId = 'game-area') {
 
 function criarNota(dadosNota, travelTime) {
   if (!containerNotas) return null;
-  
-  const elemento = document.createElement('div');
+
+  const elemento = document.createElement('img');
   elemento.className = 'note';
+  elemento.src = `assets/images/${LANE_ARROWS[dadosNota.lane] || 'down_arrow.png'}`;
+  elemento.style.width = '40px';
+  elemento.style.height = 'auto';
   elemento.dataset.lane = dadosNota.lane;
   elemento.dataset.id = proximoIdNota;
-  
+
   // Posiciona no topo, na lane correta
   const posX = LANE_POSITIONS[dadosNota.lane] || 50;
   elemento.style.left = `${posX}%`;
   elemento.style.top = '0px';
   elemento.style.transform = 'translateX(-50%)';
-  
+
+  if (dadosNota.type === 'powerup') {
+    elemento.classList.add('powerup');
+  }
+
   containerNotas.appendChild(elemento);
-  
+
   const nota = {
     id: proximoIdNota++,
     lane: dadosNota.lane,
@@ -51,9 +65,10 @@ function criarNota(dadosNota, travelTime) {
     element: elemento,
     hit: false,
     missed: false,
-    travelTime: travelTime
+    travelTime: travelTime,
+    type: dadosNota.type
   };
-  
+
   notasAtivas.push(nota);
   return nota;
 }

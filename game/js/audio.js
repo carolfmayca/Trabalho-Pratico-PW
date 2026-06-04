@@ -6,6 +6,7 @@ const CAMINHOS_SFX = {
   hit: "assets/audio/hit.wav",
   miss: "assets/audio/miss.wav",
   combo: "assets/audio/combo.wav",
+  powerup: "assets/audio/combo.wav",
 };
 
 const CAMINHO_MUSICA_PADRAO = "assets/audio/Feather.mp3";
@@ -15,6 +16,7 @@ const PRESETS_BIP = {
   hit: { freq: 880, duration: 0.06 },
   miss: { freq: 180, duration: 0.12 },
   combo: { freq: 1200, duration: 0.05 },
+  powerup: { freq: 1600, duration: 0.15 },
 };
 
 /** Aumentar quando trocar os .wav (cache do navegador). */
