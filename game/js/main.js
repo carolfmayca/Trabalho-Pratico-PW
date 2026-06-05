@@ -1,23 +1,29 @@
 UI.registrarCallbacks({
   aoIniciar: function(dificuldade) {
-    Jogo.iniciarJogo('feather', dificuldade);
     UI.mostrarTela('jogo');
+    UI.mostrarCountdown(function() {
+      Jogo.iniciarJogo('feather', dificuldade);
+    });
   },
   aoPausar: function() {
     Jogo.pausarJogo();
     UI.mostrarTela('pausa');
   },
   aoRetomar: function() {
-    Jogo.retomarJogo();
     UI.mostrarTela('jogo');
+    UI.mostrarCountdown(function() {
+      Jogo.retomarJogo();
+    });
   },
   aoSair: function() {
     Jogo.voltarMenu();
     UI.mostrarTela('menu');
   },
   aoReiniciar: function(dificuldade) {
-    Jogo.iniciarJogo('feather', dificuldade);
     UI.mostrarTela('jogo');
+    UI.mostrarCountdown(function() {
+      Jogo.iniciarJogo('feather', dificuldade);
+    });
   },
   aoMenuPrincipal: function() {
     Jogo.voltarMenu();

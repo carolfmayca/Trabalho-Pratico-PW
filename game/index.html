@@ -34,6 +34,7 @@
             </div>
 
             <button id="btn-iniciar" type="button" class="btn-primario">JOGAR</button>
+            <button id="btn-como-jogar" type="button" class="btn-secundario">COMO JOGAR</button>
 
             <p class="recorde-menu">Melhor: <span id="menu-melhor-score">0</span></p>
         </div>
@@ -74,19 +75,35 @@
 
             <div id="zona-acerto"></div>
 
-            <div class="zona-tecla" id="zona-tecla-0" data-lane="0">A</div>
-            <div class="zona-tecla" id="zona-tecla-1" data-lane="1">S</div>
-            <div class="zona-tecla" id="zona-tecla-2" data-lane="2">D</div>
-            <div class="zona-tecla" id="zona-tecla-3" data-lane="3">F</div>
+            <div class="zona-tecla" id="zona-tecla-0" data-lane="0">←</div>
+            <div class="zona-tecla" id="zona-tecla-1" data-lane="1">↓</div>
+            <div class="zona-tecla" id="zona-tecla-2" data-lane="2">↑</div>
+            <div class="zona-tecla" id="zona-tecla-3" data-lane="3">→</div>
         </div>
 
         <div id="feedback-acerto" aria-live="assertive" aria-atomic="true"></div>
+
+        <!-- Countdown 3-2-1-GO -->
+        <div id="countdown" aria-live="assertive" aria-atomic="true"></div>
     </div>
     <div id="tela-pausa" class="tela oculta">
         <div class="pausa-conteudo">
             <h2>PAUSADO</h2>
             <button id="btn-retomar" type="button" class="btn-primario">Continuar</button>
             <button id="btn-sair-pausa" type="button" class="btn-secundario">Sair</button>
+        </div>
+    </div>
+
+    <div id="tela-tutorial" class="tela oculta">
+        <div class="tutorial-conteudo">
+            <h2>COMO JOGAR</h2>
+            <ul class="tutorial-lista">
+                <li>Use as setas ← ↓ ↑ → quando as notas chegarem na linha de acerto.</li>
+                <li>Mantenha o combo para multiplicar os pontos.</li>
+                <li>Se errar ou perder notas, voce perde coracoes.</li>
+                <li>Pegue notas de power-up para ganhar multiplicador temporario.</li>
+            </ul>
+            <button id="btn-voltar-tutorial" type="button" class="btn-primario">VOLTAR</button>
         </div>
     </div>
 

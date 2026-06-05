@@ -1,5 +1,5 @@
 /** @type {Record<string, number>} */
-const TECLAS_PADRAO = { a: 0, s: 1, d: 2, f: 3 };
+const TECLAS_PADRAO = { arrowleft: 0, arrowdown: 1, arrowup: 2, arrowright: 3 };
 
 /** @type {Record<string, number>} */
 let mapaTeclaParaFaixa = { ...TECLAS_PADRAO };
@@ -150,6 +150,7 @@ function iniciarEntrada(aoPressionarFaixa) {
     if (e.repeat) return;
     const t = e.target;
     if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+    if (["ArrowLeft", "ArrowDown", "ArrowUp", "ArrowRight"].includes(e.key)) e.preventDefault();
     tratarTeclaPressionada(e.key, aoPressionarFaixa);
   };
   window.addEventListener("keydown", manipuladorTeclado);

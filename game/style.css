@@ -608,6 +608,34 @@ html, body {
 }
 
 /* ============================================================
+   COUNTDOWN
+   ============================================================ */
+#countdown {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5rem;
+  color: #fff;
+  text-shadow: 0 0 20px var(--rosa-neon), 0 0 50px var(--rosa-neon);
+  pointer-events: none;
+  z-index: 500;
+  opacity: 0;
+}
+
+#countdown.ativo {
+  animation: countdown-pop 0.8s steps(10) forwards;
+}
+
+@keyframes countdown-pop {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1.6); }
+  40%  { opacity: 1; transform: translate(-50%, -50%) scale(1.0); }
+  80%  { opacity: 1; transform: translate(-50%, -50%) scale(1.0); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+}
+
+/* ============================================================
    TELA DE PAUSA
    ============================================================ */
 #tela-pausa {
@@ -635,6 +663,50 @@ html, body {
   letter-spacing: 0.2em;
   color: var(--rosa-claro);
   text-shadow: var(--glow-rosa);
+}
+
+/* ============================================================
+   TELA DE TUTORIAL
+   ============================================================ */
+#tela-tutorial {
+  background: #0d001488;
+  backdrop-filter: blur(6px);
+  flex-direction: column;
+  z-index: 300;
+}
+
+.tutorial-conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: min(92vw, 760px);
+  padding: 2rem 2.2rem;
+  border: 3px solid var(--roxo);
+  border-radius: 0;
+  background: var(--roxo-medio);
+  box-shadow: 6px 6px 0px var(--roxo-escuro), 0 0 50px #9b30ff44;
+}
+
+.tutorial-conteudo h2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.9rem, 2.4vw, 1.3rem);
+  letter-spacing: 0.16em;
+  color: var(--rosa-claro);
+  text-shadow: var(--glow-rosa);
+  text-align: center;
+}
+
+.tutorial-lista {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.85rem;
+  color: var(--cinza-claro);
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.48rem, 1.5vw, 0.62rem);
+  line-height: 1.8;
+  letter-spacing: 0.04em;
 }
 
 /* ============================================================

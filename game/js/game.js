@@ -168,12 +168,19 @@ function terminarJogo() {
     window.Som.pausarMusica();
   }
 
-  if (window.Armazenamento && window.Entrada) {
-    const estado = window.Entrada.estadoJogador;
-    window.Armazenamento.salvarRecorde('Player', estado.score);
-    console.log(`[Game] Pontuação final: ${estado.score}`);
-    if (window.UI) window.UI.mostrarGameOver(estado.score, estado.accuracy);
+  const score = window.Entrada ? window.Entrada.estadoJogador.score : 0;
+  const accuracy = window.Entrada ? window.Entrada.estadoJogador.accuracy : { hits: 0, total: 0 };
+
+  if (window.Armazenamento) {
+    try {
+      window.Armazenamento.salvarRecorde('Player', score);
+    } catch (e) {
+      console.warn('[Game] Não foi possível salvar recorde:', e);
+    }
   }
+
+  console.log(`[Game] Pontuação final: ${score}`);
+  if (window.UI) window.UI.mostrarGameOver(score, accuracy);
 
   if (window.Notas) {
     setTimeout(() => window.Notas.limparNotas(), 1000);

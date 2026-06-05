@@ -53,6 +53,10 @@ function obterMelhorPontuacao() {
   return lista.length ? lista[0].score : 0;
 }
 
+function limparRecordes() {
+  localStorage.removeItem(CHAVE_ARMAZENAMENTO);
+}
+
 window.Armazenamento = {
   CHAVE_ARMAZENAMENTO,
   carregarRecordes,

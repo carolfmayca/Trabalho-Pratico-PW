@@ -2,6 +2,7 @@ const telas = {
   menu: document.getElementById('tela-menu'),
   jogo: document.getElementById('tela-jogo'),
   pausa: document.getElementById('tela-pausa'),
+  tutorial: document.getElementById('tela-tutorial'),
   gameOver: document.getElementById('tela-game-over'),
 };
 
@@ -19,16 +20,18 @@ const els = {
   gameOverAccuracy: document.getElementById('game-over-accuracy'),
   gameOverRecorde: document.getElementById('game-over-recorde'),
   btnIniciar: document.getElementById('btn-iniciar'),
+  btnComoJogar: document.getElementById('btn-como-jogar'),
   btnPausar: document.getElementById('btn-pausar'),
   btnRetomar: document.getElementById('btn-retomar'),
   btnSairPausa: document.getElementById('btn-sair-pausa'),
+  btnVoltarTutorial: document.getElementById('btn-voltar-tutorial'),
   btnTentarNovamente: document.getElementById('btn-tentar-novamente'),
   btnMenuPrincipal: document.getElementById('btn-menu-principal'),
 };
 
 const zonasTecla = [0, 1, 2, 3].map(i => document.getElementById('zona-tecla-' + i));
 
-/** @param {'menu'|'jogo'|'pausa'|'gameOver'} nome */
+/** @param {'menu'|'jogo'|'pausa'|'tutorial'|'gameOver'} nome */
 function mostrarTela(nome) {
   Object.entries(telas).forEach(([chave, el]) => {
     if (!el) return;
@@ -178,6 +181,19 @@ function registrarCallbacks({ aoIniciar, aoPausar, aoRetomar, aoSair, aoReinicia
     });
   }
 
+  if (els.btnComoJogar) {
+    els.btnComoJogar.addEventListener('click', () => {
+      mostrarTela('tutorial');
+    });
+  }
+
+  if (els.btnVoltarTutorial) {
+    els.btnVoltarTutorial.addEventListener('click', () => {
+      atualizarMenuRecorde();
+      mostrarTela('menu');
+    });
+  }
+
   if (els.btnRetomar) {
     els.btnRetomar.addEventListener('click', () => {
       if (typeof aoRetomar === 'function') aoRetomar();
@@ -206,7 +222,7 @@ function registrarCallbacks({ aoIniciar, aoPausar, aoRetomar, aoSair, aoReinicia
   }
 }
 
-const TECLAS_VISUAIS = { a: 0, s: 1, d: 2, f: 3 };
+const TECLAS_VISUAIS = { arrowleft: 0, arrowdown: 1, arrowup: 2, arrowright: 3 };
 
 window.addEventListener('keydown', (e) => {
   if (e.repeat) return;
@@ -218,6 +234,53 @@ window.addEventListener('keyup', (e) => {
   const lane = TECLAS_VISUAIS[e.key.toLowerCase()];
   if (lane !== undefined) teclaSolta(lane);
 });
+
+// ============================================================
+// Countdown
+// ============================================================
+
+const _elCountdown = document.getElementById('countdown');
+let _countdownTimeout = null;
+
+/**
+ * Exibe a contagem 3 → 2 → 1 → GO! sobre a tela de jogo e chama `callback` ao terminar.
+ * @param {() => void} callback função chamada após o GO!
+ */
+function mostrarCountdown(callback) {
+  const passos = ['3', '2', '1', 'GO!'];
+  let i = 0;
+
+  if (_countdownTimeout) clearTimeout(_countdownTimeout);
+
+  function proxPasso() {
+    if (!_elCountdown) {
+      if (typeof callback === 'function') callback();
+      return;
+    }
+
+    // Reinicia animação forçando reflow
+    _elCountdown.classList.remove('ativo');
+    void _elCountdown.offsetWidth;
+
+    _elCountdown.textContent = passos[i];
+    _elCountdown.classList.add('ativo');
+
+    i += 1;
+
+    if (i < passos.length) {
+      _countdownTimeout = setTimeout(proxPasso, 900);
+    } else {
+      // Após o GO! espera a animação sumir antes de chamar callback
+      _countdownTimeout = setTimeout(() => {
+        _elCountdown.classList.remove('ativo');
+        _elCountdown.textContent = '';
+        if (typeof callback === 'function') callback();
+      }, 900);
+    }
+  }
+
+  proxPasso();
+}
 
 atualizarMenuRecorde();
 mostrarTela('menu');
@@ -235,4 +298,5 @@ window.UI = {
   ativarPowerUpVisual,
   desativarPowerUpVisual,
   mostrarBonusVida,
+  mostrarCountdown,
 };
