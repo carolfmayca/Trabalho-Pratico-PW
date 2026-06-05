@@ -1,7 +1,3 @@
-/**
- * Efeitos sonoros e música.
- */
-
 const CAMINHOS_SFX = {
   hit: "assets/audio/hit.wav",
   miss: "assets/audio/miss.wav",
@@ -11,7 +7,6 @@ const CAMINHOS_SFX = {
 
 const CAMINHO_MUSICA_PADRAO = "assets/audio/Feather.mp3";
 
-/** Frequências (Hz) para fallback quando não há arquivo ou play falha */
 const PRESETS_BIP = {
   hit: { freq: 880, duration: 0.06 },
   miss: { freq: 180, duration: 0.12 },
@@ -19,7 +14,6 @@ const PRESETS_BIP = {
   powerup: { freq: 1600, duration: 0.15 },
 };
 
-/** Aumentar quando trocar os .wav (cache do navegador). */
 const VERSAO_SFX = 2;
 
 /** @type {Record<string, HTMLAudioElement>} */
@@ -45,9 +39,6 @@ function obterContextoAudio() {
   return contextoAudio;
 }
 
-/**
- * Navegadores bloqueiam áudio até haver gesto do usuário — chame no primeiro clique (ex.: "Jogar").
- */
 function retomarAudio() {
   const ctx = obterContextoAudio();
   if (ctx && ctx.state === "suspended") {

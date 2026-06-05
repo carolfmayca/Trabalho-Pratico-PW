@@ -1,8 +1,3 @@
-/**
- * Colisão / timing: nota em relação à linha da zona de acerto.
- * Contrato com o time: cada nota tem lane (0..n-1), y (px), opcional consumed.
- */
-
 let linhaAcertoY = 520;
 let toleranciaPerfeita = 15;
 let toleranciaBoa = 40;

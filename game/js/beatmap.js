@@ -1,28 +1,18 @@
-/**
- * Geração dinâmica de beatmaps.
- * A cada partida, um novo beatmap é gerado aleatoriamente.
- * A quantidade de notas varia conforme a dificuldade.
- */
-
 const MUSICAS = {
   feather: {
     nome: "Feather",
     arquivo: "assets/audio/Feather.mp3",
     bpm: 128,
-    duracao: 72000 // 1min12seg em ms
+    duracao: 72000
   }
 };
 
-// Quantidade de notas e intervalo mínimo entre notas por dificuldade
 const NOTAS_POR_DIFICULDADE = {
   easy: { quantidade: 60, intervaloMin: 800 },
   medium: { quantidade: 100, intervaloMin: 500 },
   hard: { quantidade: 150, intervaloMin: 300 }
 };
 
-/**
- * Gera um beatmap aleatório para a música e dificuldade escolhidas.
- */
 function gerarBeatmap(musica, dificuldade) {
   const infoMusica = MUSICAS[musica];
   if (!infoMusica) return null;
@@ -32,8 +22,8 @@ function gerarBeatmap(musica, dificuldade) {
 
   const { quantidade, intervaloMin } = config;
   const duracao = infoMusica.duracao;
-  const inicioNotas = 1000; // primeira nota após 1s
-  const fimNotas = duracao - 500; // última nota 500ms antes do fim
+  const inicioNotas = 1000;
+  const fimNotas = duracao - 500;
 
   const notas = [];
   const tempoDisponivel = fimNotas - inicioNotas;
@@ -53,7 +43,6 @@ function gerarBeatmap(musica, dificuldade) {
     }
   }
 
-  // Ordena por tempo e garante intervalo mínimo entre notas
   notas.sort((a, b) => a.hitTime - b.hitTime);
   for (let i = 1; i < notas.length; i++) {
     if (notas[i].hitTime - notas[i - 1].hitTime < intervaloMin) {
@@ -61,7 +50,6 @@ function gerarBeatmap(musica, dificuldade) {
     }
   }
 
-  // Remove notas que passaram do tempo da música
   const notasValidas = notas.filter(n => n.hitTime <= fimNotas);
 
   return notasValidas;
@@ -70,9 +58,9 @@ function gerarBeatmap(musica, dificuldade) {
 const DIFICULDADES = {
   easy: {
     nome: "Fácil",
-    travelTime: 2500,      // Tempo que nota leva para chegar (ms)
-    hitWindow: 500,        // Janela de acerto (ms)
-    reputacaoInicial: 5    // Vidas iniciais
+    travelTime: 2500,      
+    hitWindow: 500,        
+    reputacaoInicial: 5    
   },
   medium: {
     nome: "Médio",
@@ -105,7 +93,6 @@ function obterBeatmap(musica, dificuldade) {
   };
 }
 
-// no caso seria só feather i guess
 function listarMusicas() {
   return Object.keys(MUSICAS).map(id => ({
     id,

@@ -11,7 +11,6 @@
 </head>
 <body>
 
-    <!-- ==================== TELA: MENU INICIAL ==================== -->
     <div id="tela-menu" class="tela ativa">
         <div class="menu-conteudo">
             <img src="assets/images/logo.png" alt="Beat Slay Repeat" class="logo-jogo">
@@ -40,10 +39,8 @@
         </div>
     </div>
 
-    <!-- ==================== TELA: JOGO ==================== -->
     <div id="tela-jogo" class="tela oculta">
 
-        <!-- HUD superior -->
         <div id="hud">
             <div class="hud-item">
                 <span class="hud-rotulo">SCORE</span>
@@ -56,7 +53,6 @@
             <div class="hud-item">
                 <span class="hud-rotulo">VIDAS</span>
                 <div id="hud-reputacao">
-                    <!-- corações gerados dinamicamente por ui.js -->
                 </div>
             </div>
             <div class="hud-item">
@@ -66,34 +62,26 @@
             <button id="btn-pausar" type="button" class="btn-pausar" aria-label="Pausar jogo">⏸</button>
         </div>
 
-        <!-- Área principal: notas caem aqui-->
         <div id="area-jogo">
-            <!-- Faixas visuais -->
             <div class="faixa" id="faixa-0" data-lane="0"></div>
             <div class="faixa" id="faixa-1" data-lane="1"></div>
             <div class="faixa" id="faixa-2" data-lane="2"></div>
             <div class="faixa" id="faixa-3" data-lane="3"></div>
 
-            <!-- Personagens no palco -->
             <div id="sprite-baterista"></div>
             <div id="sprite-personagem"></div>
             <div id="sprite-guitarrista"></div>
 
-            <!-- Linha de acerto — top: 520px conforme collision.js -->
             <div id="zona-acerto"></div>
 
-            <!-- Indicadores das teclas na linha de acerto -->
             <div class="zona-tecla" id="zona-tecla-0" data-lane="0">A</div>
             <div class="zona-tecla" id="zona-tecla-1" data-lane="1">S</div>
             <div class="zona-tecla" id="zona-tecla-2" data-lane="2">D</div>
             <div class="zona-tecla" id="zona-tecla-3" data-lane="3">F</div>
         </div>
 
-        <!-- Feedback de timing: "PERFECT!", "GOOD!", "MISS" -->
         <div id="feedback-acerto" aria-live="assertive" aria-atomic="true"></div>
     </div>
-
-    <!-- ==================== TELA: PAUSA ==================== -->
     <div id="tela-pausa" class="tela oculta">
         <div class="pausa-conteudo">
             <h2>PAUSADO</h2>
@@ -102,7 +90,6 @@
         </div>
     </div>
 
-    <!-- ==================== TELA: GAME OVER ==================== -->
     <div id="tela-game-over" class="tela oculta">
         <div class="game-over-conteudo">
             <h2 class="game-over-titulo">FIM DE SHOW</h2>

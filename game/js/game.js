@@ -1,5 +1,3 @@
-// Loop principal do jogo e controle de estados.
-
 const ESTADOS = {
   MENU: 'menu',
   JOGANDO: 'playing',
@@ -24,7 +22,6 @@ let indiceProximaNota = 0;
 let animationFrameId = null;
 let fimJogoAgendado = false;
 
-// Janelas de timing em ms (quanto o jogador pode errar para cada grau)
 const JANELAS_TIMING = {
   perfect: 100,  // ±100ms → PERFECT
   great: 150,  // ±150ms → GREAT
@@ -33,7 +30,6 @@ const JANELAS_TIMING = {
 };
 
 /**
- * Retorna a qualidade do acerto baseada na diferença de tempo em ms.
  * @param {number} ms diferença absoluta entre hitTime e tempoDecorrido
  * @returns {'perfect'|'great'|'good'|'ok'}
  */
@@ -44,23 +40,17 @@ function calcularQualidadeTiming(ms) {
   return 'ok';
 }
 
-// INICIALIZAÇÃO
-
-// Inicializa o jogo
 function inicializarJogo() {
   console.log('[Game] Inicializando jogo...');
 
-  // Inicializa módulos
   if (window.Notas) {
     window.Notas.inicializarNotas('area-jogo');
   }
 
-  // Configura input
   if (window.Entrada) {
     window.Entrada.iniciarEntrada(processarTecla);
   }
 
-  // seta zona de acerto
   if (window.Colisao) {
     window.Colisao.definirZonaAcerto({
       linhaAcertoY: 520,
@@ -72,8 +62,6 @@ function inicializarJogo() {
   estadoAtual = ESTADOS.MENU;
   console.log('[Game] Jogo inicializado');
 }
-
-// CONTROLE DE ESTADOS
 
 
 function iniciarJogo(musica = 'feather', dificuldade = 'easy') {
@@ -107,7 +95,6 @@ function iniciarJogo(musica = 'feather', dificuldade = 'easy') {
     window.Notas.limparNotas();
   }
 
-  // Reseta timers
   tempoInicio = performance.now();
   tempoDecorrido = 0;
   ultimoFrame = tempoInicio;
@@ -115,7 +102,6 @@ function iniciarJogo(musica = 'feather', dificuldade = 'easy') {
   indiceProximaNota = 0;
   fimJogoAgendado = false;
 
-  // Reseta flags de spawn
   beatmapAtual.notas.forEach(nota => {
     nota.spawned = false;
     nota.hit = false;
@@ -123,13 +109,11 @@ function iniciarJogo(musica = 'feather', dificuldade = 'easy') {
 
   estadoAtual = ESTADOS.JOGANDO;
 
-  // Inicia música
   if (window.Som) {
     window.Som.retomarAudio();
     window.Som.tocarMusica(beatmapAtual.arquivo, 0.35);
   }
 
-  // Inicia loop
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId);
   }
@@ -184,7 +168,6 @@ function terminarJogo() {
     window.Som.pausarMusica();
   }
 
-  // Salva recorde
   if (window.Armazenamento && window.Entrada) {
     const estado = window.Entrada.estadoJogador;
     window.Armazenamento.salvarRecorde('Player', estado.score);
@@ -217,8 +200,6 @@ function voltarMenu() {
   beatmapAtual = null;
 }
 
-// LOOP PRINCIPAL
-
 function loopJogo(timestamp) {
   if (estadoAtual !== ESTADOS.JOGANDO) {
     return; // Para o loop se não estiver jogando
@@ -228,33 +209,26 @@ function loopJogo(timestamp) {
 
   spawnarNotas(tempoDecorrido);
 
-  // Atualiza posição das notas
   if (window.Notas) {
     window.Notas.atualizarNotas(tempoDecorrido);
   }
 
-  // Verifica notas perdidas
   verificarNotasPerdidas(tempoDecorrido);
 
   atualizarHUD();
 
-  // Verifica fim do jogo
   verificarFimJogo(tempoDecorrido);
 
   ultimoFrame = timestamp;
   animationFrameId = requestAnimationFrame(loopJogo);
 }
 
-// SPAWN DE NOTAS
-
-///baseado no beatmap e no tempo
 function spawnarNotas(tempoDecorrido) {
   if (!beatmapAtual || !window.Notas) return;
 
   const notas = beatmapAtual.notas;
   const travelTime = beatmapAtual.config.travelTime;
 
-  // Percorre notas ainda não spawnadas
   for (let i = indiceProximaNota; i < notas.length; i++) {
     const nota = notas[i];
     const tempoSpawn = nota.hitTime - travelTime;
@@ -267,13 +241,10 @@ function spawnarNotas(tempoDecorrido) {
       nota.spawned = true;
       indiceProximaNota = i + 1;
     } else if (tempoDecorrido < tempoSpawn) {
-      // Ainda não é hora de spawnar as próximas
       break;
     }
   }
 }
-
-// VERIFICAÇÕES
 
 function verificarNotasPerdidas(tempoDecorrido) {
   if (!beatmapAtual || !window.Notas || !window.Entrada) return;
@@ -284,7 +255,6 @@ function verificarNotasPerdidas(tempoDecorrido) {
   notasPerdidas.forEach(nota => {
     window.Entrada.registrarErro();
 
-    // Remove nota após delay
     setTimeout(() => window.Notas.removerNota(nota), 500);
   });
 }
@@ -294,7 +264,6 @@ function verificarFimJogo(tempoDecorrido) {
 
   const estado = window.Entrada.estadoJogador;
 
-  // Game over por reputação zerada
   if (estado.reputation <= 0) {
     console.log('[Game] Game Over: reputação zerada');
     fimJogoAgendado = true;
@@ -302,7 +271,6 @@ function verificarFimJogo(tempoDecorrido) {
     return;
   }
 
-  // Fim natural da música (se todas as notas foram processadas OU tempo da música passou)
   const todasSpawnadas = indiceProximaNota >= beatmapAtual.notas.length;
   const nenhumaAtiva = window.Notas.contarNotasNaoProcessadas() === 0;
   const musicaTerminou = tempoDecorrido >= beatmapAtual.duracao;
@@ -317,12 +285,9 @@ function verificarFimJogo(tempoDecorrido) {
   if ((todasSpawnadas && nenhumaAtiva) || musicaTerminou) {
     console.log('[Game] Fim de jogo acionado');
     fimJogoAgendado = true;
-    // Espera um pouco antes de terminar
     setTimeout(() => terminarJogo(), 2000);
   }
 }
-
-// INPUT
 
 function processarTecla(indiceLane) {
   if (estadoAtual !== ESTADOS.JOGANDO) return;
@@ -331,7 +296,6 @@ function processarTecla(indiceLane) {
   const notasAtivas = window.Notas.obterNotasAtivas();
   const hitWindow = beatmapAtual.config.hitWindow;
 
-  // Busca a nota mais próxima por timing (ms) na lane pressionada
   let melhorNota = null;
   let melhorDiff = Infinity;
 
@@ -359,23 +323,17 @@ function processarTecla(indiceLane) {
   }
 }
 
-// HUD
-
 function atualizarHUD() {
   if (!window.Entrada) return;
 
   const estado = window.Entrada.estadoJogador;
 
-  // Atualiza elementos do DOM 
   if (window.UI && window.UI.atualizarHUD) {
     window.UI.atualizarHUD(estado);
   } else {
     // erro
   }
 }
-
-
-// EXPORTS
 
 window.Jogo = {
   ESTADOS,

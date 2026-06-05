@@ -1,6 +1,3 @@
-/**
- * Persistência com localStorage.*/
-
 const CHAVE_ARMAZENAMENTO = "beat-slay-repeat-highscores-v1";
 
 /**
@@ -29,7 +26,6 @@ function salvarListaRecordes(entradas) {
 }
 
 /**
- * Registra uma partida e mantém as maiores pontuações.
  * @param {string} nome
  * @param {number} pontuacao
  * @param {number} [maximoEntradas=10]
@@ -55,11 +51,6 @@ function salvarRecorde(nome, pontuacao, maximoEntradas = 10) {
 function obterMelhorPontuacao() {
   const lista = carregarRecordes();
   return lista.length ? lista[0].score : 0;
-}
-
-/** Útil só em desenvolvimento / testes. */
-function limparRecordes() {
-  localStorage.removeItem(CHAVE_ARMAZENAMENTO);
 }
 
 window.Armazenamento = {

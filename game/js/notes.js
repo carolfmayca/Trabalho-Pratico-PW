@@ -1,6 +1,3 @@
-/**
- * Gerenciamento de notas
- */
 /** @type {Array<{id: number, lane: number, hitTime: number, y: number, element: HTMLElement, hit: boolean, missed: boolean}>} */
 let notasAtivas = [];
 
@@ -9,7 +6,6 @@ let proximoIdNota = 0;
 // onde as notas serão criadas
 let containerNotas = null;
 
-// Mapeamento de lanes para posições X
 const LANE_POSITIONS = {
   0: 12.5, 
   1: 37.5,
@@ -45,7 +41,6 @@ function criarNota(dadosNota, travelTime) {
   elemento.dataset.lane = dadosNota.lane;
   elemento.dataset.id = proximoIdNota;
 
-  // Posiciona no topo, na lane correta
   const posX = LANE_POSITIONS[dadosNota.lane] || 50;
   elemento.style.left = `${posX}%`;
   elemento.style.top = '0px';
@@ -79,7 +74,6 @@ function atualizarNotas(tempoDecorrido) {
   notasAtivas.forEach(nota => {
     if (nota.hit || nota.missed) return;
 
-    // Calcula progresso (0 = topo, 1 = linha de acerto)
     const tempoRestante = nota.hitTime - tempoDecorrido;
     const progresso = 1 - (tempoRestante / nota.travelTime);
 
@@ -89,7 +83,6 @@ function atualizarNotas(tempoDecorrido) {
 
     nota.element.style.top = `${nota.y}px`;
 
-    // Adiciona classe visual quando próxima da zona de acerto
     const distancia = Math.abs(nota.y - linhaAcertoY);
     if (distancia < 50 && !nota.element.classList.contains('near-hit')) {
       nota.element.classList.add('near-hit');
@@ -103,7 +96,6 @@ function verificarNotasPerdidas(tempoDecorrido, hitWindow) {
   notasAtivas.forEach(nota => {
     if (nota.hit || nota.missed) return;
     
-    // Se passou do tempo + janela de acerto, foi perdida
     const tempoLimite = nota.hitTime + hitWindow;
     if (tempoDecorrido > tempoLimite) {
       nota.missed = true;
@@ -121,7 +113,6 @@ function marcarNotaAcertada(nota, qualidade) {
   nota.hit = true;
   nota.element.classList.add('hit', qualidade);
   
-  // Remove após animação
   setTimeout(() => removerNota(nota), 300);
 }
 

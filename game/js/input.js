@@ -1,8 +1,3 @@
-/**
- * Teclado + estado (score, combo, reputação, acurácia).
- * game.js chama iniciarEntrada com callback que recebe lane e faz verificarAcerto nas notas.
- */
-
 /** @type {Record<string, number>} */
 const TECLAS_PADRAO = { a: 0, s: 1, d: 2, f: 3 };
 
@@ -32,22 +27,14 @@ let powerUpAtivo = false;
 let powerUpTimeout = null;
 let contagemAcertosParaBonus = 0;
 
-/**
- * Volume do hit “comum” (0..1). Ritmo costuma usar SFX mais baixo que a música
- * para não poluir; subir se estiver inaudível ou baixar (ex. 0.25) se atrapalhar a trilha.
- */
 let volumeSomAcerto = 0.38;
 
-/** A cada N acertos consecutivos toca "combo" em vez de "hit". */
 const INTERVALO_SOM_COMBO = 5;
 
 function definirVolumeSomAcerto(volume) {
   volumeSomAcerto = Math.min(1, Math.max(0, volume));
 }
 
-/**
- * Erro precisa cortar acima da música para o jogador perceber; subir se ainda ficar baixo.
- */
 let volumeSomErro = 0.92;
 
 function definirVolumeSomErro(volume) {

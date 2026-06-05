@@ -1,12 +1,3 @@
-/**
- * ui.js — Interface do usuário: transição de telas, HUD, feedback visual.
- * Depende de: window.Armazenamento, window.Entrada, window.Colisao, window.Som
- * Expõe: window.UI
- */
-
-// ============================================================
-// Referências ao DOM
-// ============================================================
 const telas = {
   menu: document.getElementById('tela-menu'),
   jogo: document.getElementById('tela-jogo'),
@@ -37,10 +28,6 @@ const els = {
 
 const zonasTecla = [0, 1, 2, 3].map(i => document.getElementById('zona-tecla-' + i));
 
-// ============================================================
-// Controle de telas
-// ============================================================
-
 /** @param {'menu'|'jogo'|'pausa'|'gameOver'} nome */
 function mostrarTela(nome) {
   Object.entries(telas).forEach(([chave, el]) => {
@@ -54,10 +41,6 @@ function mostrarTela(nome) {
     }
   });
 }
-
-// ============================================================
-// HUD
-// ============================================================
 
 function atualizarHUD() {
   const estado = window.Entrada ? window.Entrada.estadoJogador : null;
@@ -85,10 +68,6 @@ function _renderizarCoracoes(atual, maximo) {
   }
 }
 
-// ============================================================
-// Feedback de timing
-// ============================================================
-
 let _feedbackTimeout = null;
 
 /** @param {'perfect'|'great'|'good'|'ok'|'miss'} tipo */
@@ -96,9 +75,7 @@ function mostrarFeedback(tipo) {
   const el = els.feedback;
   if (!el) return;
 
-  // Remove classes anteriores e para animação em curso
   el.classList.remove('perfeito', 'bom', 'errou');
-  // Força reflow para reiniciar a animação
   void el.offsetWidth;
 
   if (tipo === 'perfect') {
@@ -122,10 +99,6 @@ function mostrarFeedback(tipo) {
   }, 700);
 }
 
-// ============================================================
-// Feedback visual nas teclas (pressionada / solta)
-// ============================================================
-
 /** @param {number} lane índice 0–3 */
 function teclaPressinada(lane) {
   const el = zonasTecla[lane];
@@ -138,10 +111,6 @@ function teclaSolta(lane) {
   if (el) el.classList.remove('pressionada');
 }
 
-// ============================================================
-// Menu inicial
-// ============================================================
-
 function atualizarMenuRecorde() {
   if (window.Armazenamento && els.menuMelhorScore) {
     els.menuMelhorScore.textContent = window.Armazenamento.obterMelhorPontuacao();
@@ -153,10 +122,6 @@ function obterDificuldadeSelecionada() {
   const input = document.querySelector('input[name="dificuldade"]:checked');
   return input ? input.value : 'medio';
 }
-
-// ============================================================
-// Tela de Game Over
-// ============================================================
 
 /**
  * @param {number} score
@@ -178,10 +143,6 @@ function mostrarGameOver(score, accuracy) {
   mostrarTela('gameOver');
 }
 
-// ============================================================
-// Power-Up Visual
-// ============================================================
-
 function ativarPowerUpVisual() {
   const areaJogo = document.getElementById('area-jogo');
   if (areaJogo) areaJogo.classList.add('power-up-ativo');
@@ -200,10 +161,6 @@ function mostrarBonusVida() {
 
   setTimeout(() => bonusEl.remove(), 1500);
 }
-
-// ============================================================
-// Listeners dos botões
-// ============================================================
 
 /** Callback chamado por main.js para conectar os botões ao game loop */
 function registrarCallbacks({ aoIniciar, aoPausar, aoRetomar, aoSair, aoReiniciar, aoMenuPrincipal }) {
@@ -249,10 +206,6 @@ function registrarCallbacks({ aoIniciar, aoPausar, aoRetomar, aoSair, aoReinicia
   }
 }
 
-// ============================================================
-// Listeners de teclado para feedback visual nas teclas
-// ============================================================
-
 const TECLAS_VISUAIS = { a: 0, s: 1, d: 2, f: 3 };
 
 window.addEventListener('keydown', (e) => {
@@ -266,16 +219,8 @@ window.addEventListener('keyup', (e) => {
   if (lane !== undefined) teclaSolta(lane);
 });
 
-// ============================================================
-// Inicialização
-// ============================================================
-
 atualizarMenuRecorde();
 mostrarTela('menu');
-
-// ============================================================
-// Exportação
-// ============================================================
 
 window.UI = {
   mostrarTela,
