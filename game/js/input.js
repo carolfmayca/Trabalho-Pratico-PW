@@ -143,14 +143,22 @@ let manipuladorTeclado = null;
 
 /**
  * @param {(lane: number) => void} aoPressionarFaixa
+ * @param {() => void} [aoSoltarEsc] callback para quando ESC é pressionado
  */
-function iniciarEntrada(aoPressionarFaixa) {
+function iniciarEntrada(aoPressionarFaixa, aoSoltarEsc) {
   if (manipuladorTeclado) window.removeEventListener("keydown", manipuladorTeclado);
   manipuladorTeclado = (e) => {
     if (e.repeat) return;
     const t = e.target;
     if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
     if (["ArrowLeft", "ArrowDown", "ArrowUp", "ArrowRight"].includes(e.key)) e.preventDefault();
+    
+    // Captura ESC para pause/retomar
+    if (e.key === "Escape") {
+      if (typeof aoSoltarEsc === "function") aoSoltarEsc();
+      return;
+    }
+    
     tratarTeclaPressionada(e.key, aoPressionarFaixa);
   };
   window.addEventListener("keydown", manipuladorTeclado);

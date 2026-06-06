@@ -48,7 +48,7 @@ function inicializarJogo() {
   }
 
   if (window.Entrada) {
-    window.Entrada.iniciarEntrada(processarTecla);
+    window.Entrada.iniciarEntrada(processarTecla, alternarPausa);
   }
 
   if (window.Colisao) {
@@ -151,6 +151,20 @@ function retomarJogo() {
   }
 
   loopJogo(performance.now());
+}
+
+function alternarPausa() {
+  if (estadoAtual === ESTADOS.JOGANDO) {
+    pausarJogo();
+    if (window.UI) window.UI.mostrarTela('pausa');
+  } else if (estadoAtual === ESTADOS.PAUSADO) {
+    if (window.UI) {
+      window.UI.mostrarTela('jogo');
+      window.UI.mostrarCountdown(function() {
+        retomarJogo();
+      });
+    }
+  }
 }
 
 function terminarJogo() {
@@ -348,6 +362,7 @@ window.Jogo = {
   iniciarJogo,
   pausarJogo,
   retomarJogo,
+  alternarPausa,
   terminarJogo,
   voltarMenu,
   obterEstadoAtual: () => estadoAtual,
