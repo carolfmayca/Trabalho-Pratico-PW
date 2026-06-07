@@ -971,11 +971,11 @@ html, body {
 }
 
 .note[data-lane="2"] {
-  background-image: url('assets/images/right_arrow.png');
+  background-image: url('assets/images/up_arrow.png');
 }
 
 .note[data-lane="3"] {
-  background-image: url('assets/images/up_arrow.png');
+  background-image: url('assets/images/right_arrow.png');
 }
 
 .note.near-hit {
