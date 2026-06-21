@@ -1,0 +1,19 @@
+<div class="col-md-4">
+    <label for="code" class="form-label">Código</label>
+    <input type="text" class="form-control" id="code" name="code" maxlength="4" value="{{major.code}}" required>
+</div>
+
+<div class="col-md-8">
+    <label for="name" class="form-label">Nome</label>
+    <input type="text" class="form-control" id="name" name="name" maxlength="100" value="{{major.name}}" required>
+</div>
+
+<div class="col-12">
+    <label for="description" class="form-label">Descrição</label>
+    <textarea class="form-control" id="description" name="description" rows="4">{{major.description}}</textarea>
+</div>
+
+<div class="col-12">
+    <button type="submit" class="btn btn-primary">Criar curso</button>
+    <a href="/majors/read/{{major.id}}" class="btn btn-secondary">Cancelar</a>
+</div>

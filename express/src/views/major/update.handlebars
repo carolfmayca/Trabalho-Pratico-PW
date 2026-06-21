@@ -1,0 +1,9 @@
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+  </div>
+</nav>
+<h3>Atualização do curos {{major.name}}</h3>
+<form class="row g-3" method="POST" action="/majors/update/{{major.id}}">
+    {{> majorForm}}
+</form>
