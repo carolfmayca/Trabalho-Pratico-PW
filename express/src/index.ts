@@ -12,6 +12,11 @@ import cookieParser from 'cookie-parser';
 import session from "express-session"
 import { v4 as uuidv4 } from "uuid"
 
+declare module 'express-session' {
+    interface SessionData {
+        uid: string
+    }
+}
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIR_VIEWS = path.join(__dirname, "../src/views")
 
@@ -53,6 +58,9 @@ app.use(session({
 
     }
 }))
+app.use((req, res, next) => {
+    res.locals.logged = !!req.session.uid
+})
 app.use(router)
 
 app.use((req, res) => {

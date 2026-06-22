@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { cleanEnv, port, str } from 'envalid';
+import { cleanEnv, port, str, num } from 'envalid';
 
 const validateEnv = () => {
     return cleanEnv(process.env, {
@@ -7,7 +7,8 @@ const validateEnv = () => {
         PORT: port(),
         OUTDIR: str(),
         DATABASE_URL: str(),
-        SECRET: str()
+        SECRET: str(),
+        BCRYPT_ROUNDS: num({ default: 10 })
     });
 };
 export default validateEnv;

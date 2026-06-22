@@ -2,6 +2,7 @@ import { Router } from 'express';
 import mainController from '../controllers/main.js';
 import majorController from '../controllers/major.js';
 import authController from '../controllers/auth.js'
+import gameController from "../controllers/game.js"
 
 const router = Router();
 
@@ -24,7 +25,10 @@ router.get("/cookie", mainController.testCookie)
 
 router.all("/signup", authController.signup)
 router.all("/login", authController.login)
-router.post("/logout", authController.logout)
+router.get("/logout", authController.logout)
+
+
+router.get("/play", gameController.play)
 
 
 export default router;
