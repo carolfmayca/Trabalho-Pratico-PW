@@ -5,7 +5,7 @@ const validateEnv = () => {
     return cleanEnv(process.env, {
         NODE_ENV: str(),
         PORT: port(),
-        OUTDIR: str(),
+        LOGS_PATH: str(),
         DATABASE_URL: str(),
         SECRET: str(),
         BCRYPT_ROUNDS: num({ default: 10 })

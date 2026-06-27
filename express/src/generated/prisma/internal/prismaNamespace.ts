@@ -385,7 +385,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Major: 'Major',
-  User: 'User'
+  User: 'User',
+  GameSession: 'GameSession'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -401,7 +402,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "major" | "user"
+    modelProps: "major" | "user" | "gameSession"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -537,6 +538,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GameSession: {
+      payload: Prisma.$GameSessionPayload<ExtArgs>
+      fields: Prisma.GameSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GameSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GameSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GameSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GameSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.GameSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GameSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GameSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GameSessionPayload>
+        }
+        findMany: {
+          args: Prisma.GameSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GameSessionPayload>[]
+        }
+        create: {
+          args: Prisma.GameSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GameSessionPayload>
+        }
+        createMany: {
+          args: Prisma.GameSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.GameSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GameSessionPayload>
+        }
+        update: {
+          args: Prisma.GameSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GameSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.GameSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GameSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.GameSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GameSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.GameSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGameSession>
+        }
+        groupBy: {
+          args: Prisma.GameSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GameSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GameSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GameSessionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -601,6 +668,17 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const GameSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  score: 'score',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GameSessionScalarFieldEnum = (typeof GameSessionScalarFieldEnum)[keyof typeof GameSessionScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -638,6 +716,14 @@ export const UserOrderByRelevanceFieldEnum = {
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
 
 
+export const GameSessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId'
+} as const
+
+export type GameSessionOrderByRelevanceFieldEnum = (typeof GameSessionOrderByRelevanceFieldEnum)[keyof typeof GameSessionOrderByRelevanceFieldEnum]
+
+
 
 /**
  * Field references
@@ -662,6 +748,13 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 /**
@@ -776,6 +869,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   major?: Prisma.MajorOmit
   user?: Prisma.UserOmit
+  gameSession?: Prisma.GameSessionOmit
 }
 
 /* Types for Logging */

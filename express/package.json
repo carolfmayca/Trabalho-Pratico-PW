@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon build/index.js",
-    "build": "tsc --watch",
+    "start": "nodemon --watch src --ext ts --exec \"tsc && node build/index.js\"",
+    "deploy": "tsc",
     "start:prod": "node build/index.js"
   },
   "keywords": [],

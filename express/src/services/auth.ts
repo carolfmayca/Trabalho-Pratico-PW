@@ -9,8 +9,10 @@ export async function createUser(data: SignupDto): Promise<User> {
     const salt = await genSalt(env.BCRYPT_ROUNDS)
     const password = await hash(data.password, salt)
     return prisma.user.create({
-        ...data,
-        password
+        data: {
+            ...data,
+            password
+        }
     })
 }
 
@@ -20,7 +22,7 @@ export async function checkCredentials(data: LoginDto): Promise<null | User> {
             email: data.email
         }
     })
-    const ok = compare(data.password, user ? user.password : "FAKEHASH")
+    const ok = await compare(data.password, user ? user.password : "FAKEHASH")
     if (!ok) return null
     return user
 }

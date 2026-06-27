@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { SignupDto, LoginDto } from "../types/auth.js"
+import type { SignupDto, SignupFormDto, LoginDto } from "../types/auth.js"
 import { getMajors } from "../services/major.js";
 import { checkCredentials, createUser } from "../services/auth.js";
 
@@ -7,14 +7,25 @@ const signup = async (req: Request, res: Response) => {
     const majors = await getMajors()
     if (req.method === "GET") {
         res.render("auth/signup", {
-            majors
+            majors,
+            hasMajors: majors.length > 0
         })
     }
 
     else if (req.method === "POST") {
-        const data = req.body as SignupDto
+        const { confirmPassword, ...data } = req.body as SignupFormDto
+
+        if (data.password !== confirmPassword) {
+            return res.status(400).render("auth/signup", {
+                majors,
+                hasMajors: majors.length > 0,
+                error: "As senhas informadas não conferem.",
+                user: data
+            })
+        }
+
         try {
-            const user = await createUser(data)
+            const user = await createUser(data as SignupDto)
             res.redirect("/login")
         }
         catch (err) {

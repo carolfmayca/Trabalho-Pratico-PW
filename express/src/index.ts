@@ -1,8 +1,6 @@
 import express from "express";
-import type { Request, Response, NextFunction } from "express";
 import validateEnv from './utils/validateEnv.js';
 import dotenv from 'dotenv';
-import fs from "fs/promises";
 import path from "path";
 import router from './router/router.js';
 import * as helpers from './views/helpers/helpers.js';
@@ -11,6 +9,7 @@ import { fileURLToPath } from "url";
 import cookieParser from 'cookie-parser';
 import session from "express-session"
 import { v4 as uuidv4 } from "uuid"
+import logger from "./middlewares/logger.js";
 
 declare module 'express-session' {
     interface SessionData {
@@ -32,17 +31,11 @@ app.engine("handlebars", engine({
 }));
 app.set("view engine", "handlebars");
 app.set("views", DIR_VIEWS);
+app.use(express.static(path.join(__dirname, "../public")));
 
 const PORT = Number(process.env.PORT) || 3333;
-const OUTDIR = process.env.OUTDIR as string;
 
-app.use(async (req: Request, res: Response, next: NextFunction) => {
-    await fs.mkdir(OUTDIR, { recursive: true })
-    // const log = `${new Date().toISOString()}, ${req.url}, ${req.method}\n`;
-    const log = `${new Date().toISOString()}, ${req.url}, ${req.method}, ${req.httpVersion}, ${req.get("User-Agent")}\n`;
-    await fs.appendFile(path.join(OUTDIR, "access.log"), log)
-    next()
-});
+app.use(logger("completo"));
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(session({
@@ -60,6 +53,7 @@ app.use(session({
 }))
 app.use((req, res, next) => {
     res.locals.logged = !!req.session.uid
+    next()
 })
 app.use(router)
 

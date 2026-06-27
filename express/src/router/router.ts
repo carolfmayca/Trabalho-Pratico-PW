@@ -29,6 +29,7 @@ router.get("/logout", authController.logout)
 
 
 router.get("/play", gameController.play)
+router.get("/about", gameController.about)
 
 
 export default router;

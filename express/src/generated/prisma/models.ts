@@ -10,4 +10,5 @@
  */
 export type * from './models/Major.js'
 export type * from './models/User.js'
+export type * from './models/GameSession.js'
 export type * from './commonInputTypes.js'

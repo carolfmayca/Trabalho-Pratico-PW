@@ -6,12 +6,17 @@ import { createMajor, getMajors, getMajor, updateMajor, removeMajor } from "../s
 const index = async (req: Request, res: Response) => {
     const majors = await getMajors()
     res.render("major/index", {
-        majors
+        majors,
+        hasMajors: majors.length > 0
     })
 }
 const create = async (req: Request, res: Response) => {
     if (req.method === "GET") {
-        res.render("major/create")
+        res.render("major/create", {
+            formAction: "/majors/create",
+            submitLabel: "Criar curso",
+            cancelHref: "/majors"
+        })
     }
     else if (req.method === "POST") {
         const major = req.body as CreateMajorDto;
@@ -43,7 +48,10 @@ const update = async (req: Request, res: Response) => {
     if (req.method === "GET") {
         const major = await getMajor(id)
         res.render("major/update", {
-            major
+            major,
+            formAction: `/majors/update/${id}`,
+            submitLabel: "Atualizar curso",
+            cancelHref: `/majors/read/${id}`
         })
     }
     else if (req.method === "POST") {
@@ -63,7 +71,10 @@ const remove = async (req: Request, res: Response) => {
     try {
         const major = await removeMajor(id)
         if (!major) return res.status(400).send("")
-        res.send(major)
+        if (req.get("X-Requested-With") === "XMLHttpRequest") {
+            return res.status(204).send()
+        }
+        res.redirect("/majors")
     }
     catch (err) {
         console.log(err)

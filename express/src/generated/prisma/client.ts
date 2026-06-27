@@ -51,3 +51,8 @@ export type Major = Prisma.MajorModel
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model GameSession
+ * 
+ */
+export type GameSession = Prisma.GameSessionModel

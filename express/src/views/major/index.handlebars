@@ -1,7 +1,91 @@
-<div class="container">
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
-    </div>
-  </nav>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="mb-0">Cursos</h3>
+  <a href="/majors/create" class="btn btn-primary">Novo curso</a>
 </div>
+
+{{#if hasMajors}}
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th class="text-end">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each majors}}
+      <tr id="major-row-{{id}}">
+        <td>{{code}}</td>
+        <td>{{name}}</td>
+        <td>{{description}}</td>
+        <td class="text-end">
+          <a href="/majors/read/{{id}}" class="btn btn-sm btn-outline-secondary">Ver</a>
+          <a href="/majors/update/{{id}}" class="btn btn-sm btn-outline-primary">Editar</a>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#deleteMajorModal"
+            data-major-id="{{id}}"
+            data-major-name="{{name}}"
+          >
+            Remover
+          </button>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+{{else}}
+<p>Nenhum curso cadastrado.</p>
+{{/if}}
+
+<div class="modal fade" id="deleteMajorModal" tabindex="-1" aria-labelledby="deleteMajorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteMajorModalLabel">Confirmar exclusão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        Tem certeza que deseja remover o curso <strong id="deleteMajorName"></strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteMajor">Remover</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const deleteMajorModal = document.getElementById("deleteMajorModal");
+  const deleteMajorName = document.getElementById("deleteMajorName");
+  const confirmDeleteMajor = document.getElementById("confirmDeleteMajor");
+  let selectedMajorId = null;
+
+  deleteMajorModal.addEventListener("show.bs.modal", (event) => {
+    const button = event.relatedTarget;
+    selectedMajorId = button.getAttribute("data-major-id");
+    deleteMajorName.textContent = button.getAttribute("data-major-name");
+  });
+
+  confirmDeleteMajor.addEventListener("click", async () => {
+    if (!selectedMajorId) return;
+
+    const response = await fetch(`/majors/remove/${selectedMajorId}`, {
+      method: "POST",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    });
+
+    if (response.ok) {
+      document.getElementById(`major-row-${selectedMajorId}`)?.remove();
+      bootstrap.Modal.getInstance(deleteMajorModal).hide();
+    }
+  });
+</script>

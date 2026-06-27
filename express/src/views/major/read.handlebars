@@ -1,4 +1,4 @@
-<div class=" mt-4" style="width: 18rem;">
+<div class="card mt-4" style="width: 18rem;">
     <div class="card-body">
         <h5 class="card-title">{{ major.name }}</h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">{{ major.code }}</h6>
@@ -6,6 +6,9 @@
         <p class="card-text">{{ major.description }}</p>
         {{/if}}
         <a href="/majors/update/{{major.id}}" class="card-link">Editar</a>
-        <a href="#" class="card-link">Remover</a>
+        <form action="/majors/remove/{{major.id}}" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-link card-link p-0 align-baseline">Remover</button>
+        </form>
+        <a href="/majors" class="card-link">Voltar</a>
     </div>
 </div>
