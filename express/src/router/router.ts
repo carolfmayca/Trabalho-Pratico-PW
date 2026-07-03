@@ -3,10 +3,11 @@ import mainController from '../controllers/main.js';
 import majorController from '../controllers/major.js';
 import authController from '../controllers/auth.js'
 import gameController from "../controllers/game.js"
+import requireAuth from '../middlewares/auth.js'
 
 const router = Router();
 
-router.get('/', mainController.index);
+router.get('/', requireAuth, gameController.play);
 router.get('/lorem/:num', mainController.lorem);
 router.get('/bemvindo/:nome', mainController.bemvindo);
 router.get('/sobre', mainController.sobre);
@@ -27,9 +28,9 @@ router.all("/signup", authController.signup)
 router.all("/login", authController.login)
 router.get("/logout", authController.logout)
 
-
-router.get("/play", gameController.play)
+router.get("/play", requireAuth, gameController.play)
 router.get("/about", gameController.about)
-
+router.post("/game/score", requireAuth, gameController.score)
+router.get("/ranking", requireAuth, gameController.ranking)
 
 export default router;

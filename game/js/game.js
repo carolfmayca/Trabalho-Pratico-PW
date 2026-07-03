@@ -193,6 +193,15 @@ function terminarJogo() {
     }
   }
 
+  // Envia pontuação ao servidor Express (funciona apenas quando o jogo está
+  // incorporado via iframe na aplicação web — falha silenciosamente fora dela)
+  fetch('/game/score', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ score })
+  }).catch(() => { /* fora do contexto Express — ignora */ });
+
   console.log(`[Game] Pontuação final: ${score}`);
   if (window.UI) window.UI.mostrarGameOver(score, accuracy);
 

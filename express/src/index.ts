@@ -32,11 +32,13 @@ app.engine("handlebars", engine({
 app.set("view engine", "handlebars");
 app.set("views", DIR_VIEWS);
 app.use(express.static(path.join(__dirname, "../public")));
+app.use('/jogo', express.static(path.join(__dirname, '../../game')));
 
 const PORT = Number(process.env.PORT) || 3333;
 
 app.use(logger("completo"));
 app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 app.use(cookieParser())
 app.use(session({
     name: 'sid',
