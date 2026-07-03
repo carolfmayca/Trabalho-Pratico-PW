@@ -23,18 +23,20 @@ Crie um arquivo `.env` na raiz do projeto. Exemplo:
 ```env
 NODE_ENV=development
 PORT=3333
-OUTDIR=saida
+LOGS_PATH=logs
 DATABASE_URL="mysql://root:senhasegura@127.0.0.1:3307/game"
 SECRET="troque-este-segredo"
+BCRYPT_ROUNDS=10
 ```
 
 Variaveis usadas pela aplicacao:
 
 - `NODE_ENV`: ambiente da aplicacao, por exemplo `development`
 - `PORT`: porta onde o Express vai rodar
-- `OUTDIR`: pasta onde o arquivo de log `access.log` sera salvo
+- `LOGS_PATH`: pasta onde o arquivo de log `access.log` sera salvo
 - `DATABASE_URL`: URL de conexao com o banco MySQL
 - `SECRET`: chave usada pela sessao do Express
+- `BCRYPT_ROUNDS`: quantidade de rounds usada para criptografar senhas
 
 ## Subir o banco com Docker
 
@@ -141,32 +143,54 @@ Depois inicie com Node:
 npm run start:prod
 ```
 
-## Rotas principais
+## Rotas
 
-- `GET /`: pagina inicial
-- `GET /sobre`: pagina sobre
-- `GET /lorem/:num`: gera texto lorem ipsum
-- `GET /bemvindo/:nome`: pagina de boas-vindas
-- `GET /hb1`, `/hb2`, `/hb3`, `/hb4`: exemplos com Handlebars
-- `GET /majors`: lista cursos
-- `GET /majors/create`: formulario para criar curso
-- `POST /majors/create`: cria curso
-- `GET /majors/read/:id`: mostra um curso
-- `GET /majors/update/:id`: formulario para editar curso
-- `POST /majors/update/:id`: atualiza curso
-- `POST /majors/remove/:id`: remove curso
-- `GET /signup`: formulario de cadastro
-- `POST /logout`: logout
+### Jogo
+
+- `GET /`: pagina principal do jogo. Requer login.
+- `GET /play`: pagina do jogo. Requer login.
+- `GET /about`: pagina sobre o jogo.
+- `GET /ranking`: ranking com as melhores pontuacoes. Requer login.
+- `POST /game/score`: salva a pontuacao de uma partida via Ajax. Requer login.
+
+### Autenticacao
+
+- `GET /signup`: formulario de cadastro.
+- `POST /signup`: cria uma conta de usuario.
+- `GET /login`: formulario de login.
+- `POST /login`: autentica o usuario.
+- `GET /logout`: encerra a sessao.
+
+### Cursos
+
+- `GET /majors/`: lista cursos.
+- `GET /majors/create`: formulario para criar curso.
+- `POST /majors/create`: cria curso.
+- `GET /majors/read/:id`: mostra um curso.
+- `GET /majors/update/:id`: formulario para editar curso.
+- `POST /majors/update/:id`: atualiza curso.
+- `POST /majors/remove/:id`: remove curso via POST/Ajax.
+
+### Exercicios e exemplos
+
+- `GET /lorem/:num`: gera uma pagina HTML com a quantidade informada de paragrafos lorem ipsum.
+- `GET /bemvindo/:nome`: pagina de boas-vindas.
+- `GET /sobre`: exemplo simples de pagina sobre.
+- `GET /hb1`: exemplo Handlebars imprimindo uma variavel.
+- `GET /hb2`: exemplo Handlebars usando `#if`.
+- `GET /hb3`: exemplo Handlebars usando `#each`.
+- `GET /hb4`: exemplo Handlebars usando helper customizado.
+- `GET /cookie`: rota de teste para criacao/leitura de cookie.
 
 ## Logs
 
 A aplicacao grava acessos em:
 
 ```text
-saida/access.log
+logs/access.log
 ```
 
-Esse caminho depende da variavel `OUTDIR`.
+Esse caminho depende da variavel `LOGS_PATH`.
 
 ## Parar containers
 

@@ -307,7 +307,7 @@ html, body {
    HUD
    ============================================================ */
 #hud {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -400,8 +400,9 @@ html, body {
 #tela-jogo {
   align-items: flex-start;
   justify-content: center;
-  margin-top: 50px;
-  background: url('assets/images/tela_principal.png') center center / 70% auto no-repeat;
+  width: 100%;
+  height: 100%;
+  background: url('assets/images/tela_principal.png') center bottom / auto 100% no-repeat;
   overflow: hidden;
   position: relative;
   transition: filter 0.3s ease;
@@ -429,7 +430,7 @@ html, body {
 #area-jogo {
   position: relative;
   width: 480px;
-  height: calc(100vh - 60px);
+  height: calc(100% - 60px);
   margin-top: 60px;
   overflow: hidden;
 }
