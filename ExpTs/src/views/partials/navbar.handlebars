@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg app-navbar navbar-dark">
+  <div class="container">
+    <a class="navbar-brand app-navbar-brand" href="{{#if logged}}/{{else}}/about{{/if}}">Beat-Slay-Repeat</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarMain"
+      aria-controls="navbarMain"
+      aria-expanded="false"
+      aria-label="Alternar navegação"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link {{navActive currentPath '/about'}}" href="/about">Sobre</a>
+        </li>
+        {{#if logged}}
+        <li class="nav-item">
+          <a class="nav-link {{navActive currentPath '/'}}" href="/">Jogar</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{navActive currentPath '/ranking'}}" href="/ranking">Ranking</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Sair</a>
+        </li>
+        {{else}}
+        <li class="nav-item">
+          <a class="nav-link {{navActive currentPath '/login'}}" href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{navActive currentPath '/signup'}}" href="/signup">Criar Conta</a>
+        </li>
+        {{/if}}
+      </ul>
+    </div>
+  </div>
+</nav>

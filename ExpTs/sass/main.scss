@@ -1,0 +1,76 @@
+$hb1-text-color: #4d926f;
+
+$nav-bg: #1e003a;
+$nav-border: #ff2d78;
+$nav-text: #ffffff;
+$nav-muted: #d4b8ff;
+$nav-active: #ff6eb0;
+$page-bg: #f8f9fa;
+
+.hb1-mensagem {
+  color: $hb1-text-color;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.app-navbar {
+  background-color: $nav-bg !important;
+  border-bottom: 2px solid $nav-border;
+  box-shadow: 0 0 12px rgba(255, 45, 120, 0.25);
+  margin-bottom: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.app-navbar .navbar-brand,
+.app-navbar .nav-link {
+  color: $nav-text !important;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.app-navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.app-navbar .nav-link:hover,
+.app-navbar .navbar-brand:hover {
+  color: $nav-active !important;
+}
+
+.app-navbar .nav-link.active {
+  color: $nav-active !important;
+  font-weight: 700;
+}
+
+body:not(.game-layout) {
+  background-color: $page-bg;
+}
+
+body:not(.game-layout) main.container {
+  padding-top: 1.5rem;
+}
+
+body.game-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #0d0014;
+}
+
+body.game-layout .app-navbar {
+  flex-shrink: 0;
+}
+
+body.game-layout .game-page {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+body.game-layout .game-page .tela {
+  position: absolute;
+  inset: 0;
+}

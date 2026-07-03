@@ -4,6 +4,9 @@ import { getMajors } from "../services/major.js";
 import { checkCredentials, createUser } from "../services/auth.js";
 
 const signup = async (req: Request, res: Response) => {
+    if (req.session.uid) {
+        return res.redirect("/")
+    }
     const majors = await getMajors()
     if (req.method === "GET") {
         res.render("auth/signup", {
@@ -35,6 +38,9 @@ const signup = async (req: Request, res: Response) => {
 }
 
 const login = async (req: Request, res: Response) => {
+    if (req.session.uid) {
+        return res.redirect("/")
+    }
     if (req.method === "GET") {
         res.render("auth/login")
     }
@@ -44,7 +50,7 @@ const login = async (req: Request, res: Response) => {
             const user = await checkCredentials(data)
             if (user) {
                 req.session.uid = user.id
-                res.redirect("/play")
+                res.redirect("/")
             }
             else {
                 res.redirect("/login")

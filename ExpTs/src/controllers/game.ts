@@ -2,7 +2,7 @@ import type { Request, Response } from "express"
 import { saveScore, getTopScores } from "../services/game.js"
 
 const play = (req: Request, res: Response) => {
-    res.render("game/play", { layout: false })
+    res.render("game/play", { layout: "game" })
 }
 
 const about = (req: Request, res: Response) => {

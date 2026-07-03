@@ -1,12 +1,13 @@
 {
-  "name": "express",
+  "name": "expts",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "nodemon --watch src --ext ts --exec \"tsc && node build/index.js\"",
     "deploy": "tsc",
-    "start:prod": "node build/index.js"
+    "start:prod": "node build/index.js",
+    "sass": "sass sass/main.scss public/css/main.css --watch"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +34,7 @@
     "@types/node": "^25.9.3",
     "nodemon": "^3.1.14",
     "prisma": "^7.8.0",
+    "sass": "^1.89.2",
     "typescript": "^6.0.3"
   }
 }

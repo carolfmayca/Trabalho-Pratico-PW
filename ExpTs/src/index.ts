@@ -19,7 +19,7 @@ declare module 'express-session' {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIR_VIEWS = path.join(__dirname, "../src/views")
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, "../.env") });
 validateEnv();
 
 const app = express();
@@ -31,8 +31,14 @@ app.engine("handlebars", engine({
 }));
 app.set("view engine", "handlebars");
 app.set("views", DIR_VIEWS);
-app.use(express.static(path.join(__dirname, "../public")));
-app.use('/jogo', express.static(path.join(__dirname, '../../game')));
+
+const publicPath = path.join(__dirname, "../public");
+const gamePath = path.join(__dirname, "../../game");
+
+app.use("/css", express.static(path.join(publicPath, "css")));
+app.use("/js", express.static(path.join(publicPath, "js")));
+app.use("/img", express.static(path.join(publicPath, "img")));
+app.use("/jogo", express.static(gamePath));
 
 const PORT = Number(process.env.PORT) || 3333;
 
@@ -55,6 +61,7 @@ app.use(session({
 }))
 app.use((req, res, next) => {
     res.locals.logged = !!req.session.uid
+    res.locals.currentPath = req.path
     next()
 })
 app.use(router)
